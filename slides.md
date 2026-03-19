@@ -16,11 +16,6 @@ fonts:
   <h1>Claude Code</h1>
   <p class="subtitle"><em>for the Rest of Us</em></p>
   <div class="gold-rule"></div>
-  <div class="candle">
-    <div class="flame"></div>
-    <div class="wick"></div>
-    <div class="wax"></div>
-  </div>
   <p class="footer">Claude Code Community Meetup</p>
 </div>
 
@@ -32,6 +27,16 @@ fonts:
   justify-content: center;
   height: 100%;
   gap: 0;
+  background: url('/images/01-candle.png') center 60% / cover no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.slide-title::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center 60%, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.85) 50%, rgba(8,8,8,0.95) 100%);
+  z-index: -1;
 }
 .slide-title h1 {
   font-family: Georgia, serif;
@@ -40,12 +45,14 @@ fonts:
   color: #F5F0E8;
   margin: 16px 0 0 0;
   letter-spacing: 2px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
 }
 .slide-title .subtitle {
   font-family: Georgia, serif;
   font-size: 30pt;
   color: #C9A84C;
   margin: 0 0 16px 0;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8);
 }
 .slide-title .gold-rule {
   width: 320px;
@@ -55,33 +62,8 @@ fonts:
 .slide-title .footer {
   font-family: Calibri, sans-serif;
   font-size: 13pt;
-  color: #606060;
+  color: #808080;
   margin-top: 48px;
-}
-.slide-title .candle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 40px;
-}
-.slide-title .flame {
-  width: 14px;
-  height: 28px;
-  background: radial-gradient(ellipse at 50% 80%, #C9A84C 0%, #7A5A10 50%, transparent 70%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  box-shadow: 0 0 30px 10px rgba(201,168,76,0.25), 0 0 60px 20px rgba(201,168,76,0.1);
-  animation: flicker 3s ease-in-out infinite;
-}
-.slide-title .wick {
-  width: 2px;
-  height: 6px;
-  background: #606060;
-}
-.slide-title .wax {
-  width: 8px;
-  height: 32px;
-  background: linear-gradient(180deg, #F5F0E8 0%, #d0cbbe 100%);
-  border-radius: 2px 2px 3px 3px;
 }
 @keyframes flicker {
   0%, 100% { opacity: 1; transform: scaleY(1) rotate(0deg); }
@@ -106,11 +88,6 @@ Let it sit for a moment — then go straight into the Clarke quote.
     Any sufficiently advanced technology<br/>is indistinguishable from magic.
   </blockquote>
   <p class="attribution">— Arthur C. Clarke, 1973</p>
-  <div class="candle">
-    <div class="flame"></div>
-    <div class="wick"></div>
-    <div class="wax"></div>
-  </div>
 </div>
 
 <style>
@@ -121,6 +98,15 @@ Let it sit for a moment — then go straight into the Clarke quote.
   justify-content: center;
   height: 100%;
   position: relative;
+  z-index: 1;
+  background: url('/images/01-candle.png') center 70% / cover no-repeat;
+}
+.slide-quote::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center 70%, rgba(8,8,8,0.5) 0%, rgba(8,8,8,0.82) 40%, rgba(8,8,8,0.95) 100%);
+  z-index: -1;
 }
 .slide-quote .quote-mark {
   font-family: Georgia, serif;
@@ -143,37 +129,14 @@ Let it sit for a moment — then go straight into the Clarke quote.
   border: none;
   margin: 0;
   padding: 0;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.9);
 }
 .slide-quote .attribution {
   font-family: Calibri, sans-serif;
   font-size: 16pt;
   color: #C9A84C;
   margin-top: 24px;
-}
-.slide-quote .candle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 48px;
-}
-.slide-quote .flame {
-  width: 14px;
-  height: 28px;
-  background: radial-gradient(ellipse at 50% 80%, #C9A84C 0%, #7A5A10 50%, transparent 70%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  box-shadow: 0 0 30px 10px rgba(201,168,76,0.25), 0 0 60px 20px rgba(201,168,76,0.1);
-  animation: flicker 3s ease-in-out infinite;
-}
-.slide-quote .wick {
-  width: 2px;
-  height: 6px;
-  background: #606060;
-}
-.slide-quote .wax {
-  width: 8px;
-  height: 32px;
-  background: linear-gradient(180deg, #F5F0E8 0%, #d0cbbe 100%);
-  border-radius: 2px 2px 3px 3px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.8);
 }
 </style>
 
@@ -260,17 +223,28 @@ Read it. Pause.
   justify-content: center;
   height: 100%;
   padding: 32px;
+  background: url('/images/06-terminal-glow.png') center center / cover no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.slide-terminal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(8,8,8,0.6) 0%, rgba(8,8,8,0.88) 60%, rgba(8,8,8,0.96) 100%);
+  z-index: -1;
 }
 .terminal-window {
-  background: #0A1A0A;
+  background: rgba(10,26,10,0.92);
   border-radius: 10px;
   width: 90%;
   max-width: 800px;
   overflow: hidden;
-  box-shadow: 0 0 60px rgba(0,204,68,0.08);
+  box-shadow: 0 0 60px rgba(0,204,68,0.12), 0 4px 40px rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
 }
 .title-bar {
-  background: #1a1a1a;
+  background: rgba(26,26,26,0.95);
   padding: 10px 16px;
   display: flex;
   align-items: center;
@@ -332,12 +306,6 @@ Read both exchanges. When you reach "Fair point." — pause before reading the s
 
 <div class="slide-system-prompt">
   <h2>THE SYSTEM PROMPT</h2>
-  <div class="envelope">
-    <div class="flap"></div>
-    <div class="body">
-      <div class="seal">A</div>
-    </div>
-  </div>
   <p class="caption"><em>The letter it arrives with. Before you type a single word.</em></p>
 </div>
 
@@ -349,6 +317,22 @@ Read both exchanges. When you reach "Fair point." — pause before reading the s
   justify-content: center;
   height: 100%;
   gap: 0;
+  background: url('/images/02-sealed-letter.png') center center / cover no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.slide-system-prompt::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(8,8,8,0.4) 0%,
+    rgba(8,8,8,0.25) 30%,
+    rgba(8,8,8,0.25) 60%,
+    rgba(8,8,8,0.7) 100%
+  );
+  z-index: -1;
 }
 .slide-system-prompt h2 {
   font-family: Georgia, serif;
@@ -356,60 +340,18 @@ Read both exchanges. When you reach "Fair point." — pause before reading the s
   font-weight: bold;
   color: #F5F0E8;
   letter-spacing: 5px;
-  margin: 0 0 40px 0;
-}
-.envelope {
-  position: relative;
-  width: 220px;
-  height: 150px;
-}
-.envelope .body {
-  position: absolute;
-  bottom: 0;
-  width: 220px;
-  height: 130px;
-  background: linear-gradient(135deg, #2a2018 0%, #1a1510 100%);
-  border: 1px solid #C9A84C;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.envelope .flap {
-  position: absolute;
-  top: 0;
-  left: 10px;
-  width: 0;
-  height: 0;
-  border-left: 100px solid transparent;
-  border-right: 100px solid transparent;
-  border-top: 65px solid #1a1510;
-  z-index: 1;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
-}
-.envelope .seal {
-  width: 48px;
-  height: 48px;
-  background: radial-gradient(circle at 40% 40%, #a00000, #8B0000, #5a0000);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: Georgia, serif;
-  font-size: 22pt;
-  font-weight: bold;
-  color: #F5F0E8;
-  box-shadow: 0 0 20px rgba(139,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.3);
-  z-index: 2;
-  position: relative;
+  margin: 0 0 auto 0;
+  padding-top: 60px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.5);
 }
 .slide-system-prompt .caption {
   font-family: Calibri, sans-serif;
   font-size: 19pt;
   font-style: italic;
-  color: #606060;
-  margin-top: 40px;
+  color: #C9A84C;
+  margin: auto 0 60px 0;
   text-align: center;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.9);
 }
 </style>
 
@@ -428,12 +370,6 @@ You didn't write it. You can't see it. But it shapes everything."
 
 <div class="slide-context">
   <h2>THE CONTEXT WINDOW</h2>
-  <div class="spotlight-container">
-    <div class="spotlight-ring ring-outer"></div>
-    <div class="spotlight-ring ring-mid"></div>
-    <div class="spotlight-ring ring-inner"></div>
-    <div class="spotlight-label"><em>What Claude can see right now</em></div>
-  </div>
   <p class="caption">Everything inside — exists. &nbsp; Everything outside — doesn't.</p>
 </div>
 
@@ -444,6 +380,22 @@ You didn't write it. You can't see it. But it shapes everything."
   align-items: center;
   justify-content: center;
   height: 100%;
+  background: url('/images/03-spotlight.png') center center / cover no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.slide-context::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(8,8,8,0.3) 0%,
+    rgba(8,8,8,0.15) 35%,
+    rgba(8,8,8,0.15) 65%,
+    rgba(8,8,8,0.6) 100%
+  );
+  z-index: -1;
 }
 .slide-context h2 {
   font-family: Georgia, serif;
@@ -451,52 +403,17 @@ You didn't write it. You can't see it. But it shapes everything."
   font-weight: bold;
   color: #F5F0E8;
   letter-spacing: 5px;
-  margin: 0 0 32px 0;
-}
-.spotlight-container {
-  position: relative;
-  width: 360px;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.spotlight-ring {
-  position: absolute;
-  border-radius: 50%;
-}
-.ring-outer {
-  width: 360px;
-  height: 220px;
-  background: radial-gradient(ellipse, rgba(201,168,76,0.04) 0%, transparent 70%);
-  border: 1px solid rgba(201,168,76,0.08);
-}
-.ring-mid {
-  width: 260px;
-  height: 160px;
-  background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%);
-  border: 1px solid rgba(201,168,76,0.15);
-}
-.ring-inner {
-  width: 160px;
-  height: 100px;
-  background: radial-gradient(ellipse, rgba(201,168,76,0.15) 0%, transparent 70%);
-  border: 1px solid rgba(201,168,76,0.3);
-  box-shadow: 0 0 40px rgba(201,168,76,0.1);
-}
-.spotlight-label {
-  position: relative;
-  z-index: 1;
-  font-family: Calibri, sans-serif;
-  font-size: 13pt;
-  color: #C9A84C;
+  margin: 0 0 auto 0;
+  padding-top: 60px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.5);
 }
 .slide-context .caption {
   font-family: Georgia, serif;
   font-size: 20pt;
   color: #F5F0E8;
-  margin-top: 40px;
+  margin: auto 0 60px 0;
   text-align: center;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.5);
 }
 </style>
 
@@ -564,6 +481,16 @@ It hasn't forgotten. It just can't see that far back anymore."
   height: 100%;
   gap: 0;
   padding: 24px 32px;
+  background: url('/images/04-lantern-figure.png') center center / cover no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.slide-loop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(8,8,8,0.78) 0%, rgba(8,8,8,0.9) 50%, rgba(8,8,8,0.96) 100%);
+  z-index: -1;
 }
 .steps {
   display: flex;
@@ -576,11 +503,12 @@ It hasn't forgotten. It just can't see that far back anymore."
   border-radius: 8px;
   text-align: center;
   min-width: 110px;
+  backdrop-filter: blur(4px);
 }
-.step.green { background: rgba(0,204,68,0.12); border: 1px solid rgba(0,204,68,0.3); }
-.step.blue { background: rgba(80,130,200,0.12); border: 1px solid rgba(80,130,200,0.3); }
-.step.gold { background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); }
-.step.grey { background: rgba(96,96,96,0.12); border: 1px solid rgba(96,96,96,0.3); }
+.step.green { background: rgba(0,204,68,0.15); border: 1px solid rgba(0,204,68,0.35); }
+.step.blue { background: rgba(80,130,200,0.15); border: 1px solid rgba(80,130,200,0.35); }
+.step.gold { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.35); }
+.step.grey { background: rgba(96,96,96,0.15); border: 1px solid rgba(96,96,96,0.35); }
 .step-label {
   font-family: Georgia, serif;
   font-size: 16pt;
@@ -594,7 +522,7 @@ It hasn't forgotten. It just can't see that far back anymore."
 .step-desc {
   font-family: Calibri, sans-serif;
   font-size: 11pt;
-  color: #606060;
+  color: #808080;
 }
 .arrow {
   font-size: 20pt;
@@ -646,7 +574,7 @@ It hasn't forgotten. It just can't see that far back anymore."
   font-family: Calibri, sans-serif;
   font-size: 13pt;
 }
-.attempt.fail { color: #606060; }
+.attempt.fail { color: #808080; }
 .attempt.success { color: #F5F0E8; }
 .attempt .mark { margin-right: 8px; }
 .attempt.fail .mark { color: #606060; }
@@ -678,16 +606,6 @@ comes back, reassesses. The results were in a completely different league."
 
 <div class="slide-bookend">
   <h2><em>Is it still magic?</em></h2>
-  <div class="candle-hand">
-    <div class="flame"></div>
-    <div class="wick"></div>
-    <div class="wax"></div>
-    <div class="hand">
-      <svg viewBox="0 0 80 60" width="80" height="60">
-        <path d="M25,5 C20,5 15,10 15,18 L15,35 C15,40 18,45 25,45 L55,45 C60,45 63,40 63,35 L63,18 C63,10 58,5 53,5 L53,5 C50,5 48,8 48,12 L48,5 C48,2 45,0 42,0 C39,0 37,2 37,5 L37,12 L37,5 C37,2 34,0 31,0 C28,0 25,2 25,5Z" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.6"/>
-      </svg>
-    </div>
-  </div>
   <blockquote>"Any technology you understand is no longer magic."</blockquote>
 </div>
 
@@ -698,42 +616,25 @@ comes back, reassesses. The results were in a completely different league."
   align-items: center;
   justify-content: center;
   height: 100%;
+  background: url('/images/05-hand-candle.png') center center / cover no-repeat;
+  position: relative;
+  z-index: 1;
+}
+.slide-bookend::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center 45%, rgba(8,8,8,0.35) 0%, rgba(8,8,8,0.7) 40%, rgba(8,8,8,0.92) 100%);
+  z-index: -1;
 }
 .slide-bookend h2 {
   font-family: Georgia, serif;
   font-size: 48pt;
   font-weight: bold;
   color: #F5F0E8;
-  margin: 0 0 40px 0;
-}
-.candle-hand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 40px;
-}
-.candle-hand .flame {
-  width: 16px;
-  height: 32px;
-  background: radial-gradient(ellipse at 50% 80%, #C9A84C 0%, #7A5A10 50%, transparent 70%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  box-shadow: 0 0 40px 12px rgba(201,168,76,0.3), 0 0 80px 25px rgba(201,168,76,0.12);
-  animation: flicker 3s ease-in-out infinite;
-}
-.candle-hand .wick {
-  width: 2px;
-  height: 6px;
-  background: #606060;
-}
-.candle-hand .wax {
-  width: 10px;
-  height: 40px;
-  background: linear-gradient(180deg, #F5F0E8 0%, #d0cbbe 100%);
-  border-radius: 2px 2px 3px 3px;
-}
-.candle-hand .hand {
-  margin-top: -8px;
-  opacity: 0.7;
+  margin: 0 0 auto 0;
+  padding-top: 80px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.5);
 }
 .slide-bookend blockquote {
   font-family: Georgia, serif;
@@ -742,9 +643,10 @@ comes back, reassesses. The results were in a completely different league."
   color: #C9A84C;
   text-align: center;
   border: none;
-  margin: 0;
+  margin: auto 0 80px 0;
   padding: 0;
   max-width: 80%;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.9);
 }
 </style>
 
