@@ -1,13 +1,29 @@
 ---
 name: create-html-slide
-description: Explains code with visual diagrams and analogies. Use when explaining how code works, teaching about a codebase, or when the user asks "how does this work?"
+description: Create a single-file, fullscreen HTML slide for a live presentation.
 ---
 
-When explaining code, always include:
+## What makes a great slide
+- **One idea only** — if it needs scrolling, it's too much
+- **Visual over text** — show the concept, don't describe it
+- **Interaction teaches** — let the audience do something to feel the idea
+- **Breathing room** — whitespace is not wasted space
+- **Readable at distance** — minimum 24px body, 48px+ headlines
+- **Purposeful animation** — slow enough to follow, never decorative
 
-1. **Start with an analogy**: Compare the code to something from everyday life
-2. **Draw a diagram**: Use ASCII art to show the flow, structure, or relationships
-3. **Walk through the code**: Explain step-by-step what happens
-4. **Highlight a gotcha**: What's a common mistake or misconception?
+## Rules
+- Single `.html` file, no external dependencies
+- Fullscreen by default (`body { margin: 0; height: 100vh }`)
+- Dark backgrounds reduce eye fatigue on projectors
+- Max 2 fonts, max 3 colors
+- One primary interaction per slide — clicking, typing, or watching
+- Always tell the user what to do (subtle prompt or label)
 
-Keep explanations conversational. For complex concepts, use multiple analogies.
+## Inputs to ask for before building
+1. **Concept** — what is the one idea this slide teaches?
+2. **Audience** — who are they and what do they already know?
+3. **Feeling** — what should they feel after interacting with it?
+4. **Style** — colors, fonts, tone (or point to a style guide)
+
+## Output
+A single named `.html` file. Filename reflects the concept.
