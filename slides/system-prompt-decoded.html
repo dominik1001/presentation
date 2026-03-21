@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Inside Claude Code's Brain?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    height: 100vh;
+    overflow: hidden;
+    background: #0a0a0f;
+    color: #e8e4df;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      transparent 0px, transparent 2px,
+      rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Classified stamp watermark */
+  .watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-25deg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 14vw;
+    color: rgba(217, 158, 46, 0.018);
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    z-index: 0;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 92vw;
+    max-width: 1400px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 2.5vh 0 1.5vh;
+    flex-shrink: 0;
+  }
+
+  .stamp {
+    display: inline-block;
+    border: 2px solid #d99e2e;
+    color: #d99e2e;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: clamp(10px, 1.2vw, 14px);
+    letter-spacing: 0.25em;
+    padding: 4px 18px;
+    margin-bottom: 1.2vh;
+    opacity: 0.8;
+    transform: rotate(-1deg);
+  }
+
+  h1 {
+    font-size: clamp(32px, 4.5vw, 72px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .subtitle {
+    font-size: clamp(14px, 1.6vw, 22px);
+    color: #8a8578;
+    margin-top: 0.5vh;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin: 1.8vh 0 0;
+    flex-shrink: 0;
+  }
+
+  .tab {
+    flex: 1;
+    padding: clamp(10px, 1.4vh, 18px) 8px;
+    background: #14141c;
+    border: 1px solid #1e1e2a;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(12px, 1.3vw, 18px);
+    color: #5a5650;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+  }
+
+  .tab:hover { color: #a09888; background: #181822; }
+
+  .tab.active {
+    background: #1a1a24;
+    color: #d99e2e;
+    border-color: #2a2a38;
+  }
+
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #d99e2e;
+  }
+
+  .tab-number {
+    display: inline-block;
+    width: clamp(20px, 2vw, 28px);
+    height: clamp(20px, 2vw, 28px);
+    line-height: clamp(20px, 2vw, 28px);
+    border-radius: 50%;
+    background: #1e1e2a;
+    font-size: clamp(10px, 1vw, 14px);
+    margin-right: 6px;
+    vertical-align: middle;
+    transition: background 0.3s;
+  }
+
+  .tab.active .tab-number {
+    background: #d99e2e;
+    color: #0a0a0f;
+  }
+
+  /* Panel area */
+  .panel-area {
+    flex: 1;
+    background: #1a1a24;
+    border: 1px solid #2a2a38;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+  }
+
+  .panel {
+    position: absolute;
+    inset: 0;
+    padding: clamp(20px, 3vw, 48px);
+    display: flex;
+    gap: clamp(20px, 3vw, 48px);
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .panel.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  /* Prompt excerpt */
+  .prompt-box {
+    flex: 1.1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .prompt-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(9px, 0.9vw, 12px);
+    color: #d99e2e;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+
+  .prompt-excerpt {
+    flex: 1;
+    background: #0e0e16;
+    border: 1px solid #252530;
+    border-radius: 8px;
+    padding: clamp(16px, 2vw, 32px);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(13px, 1.35vw, 21px);
+    line-height: 1.65;
+    color: #b8b0a4;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prompt-excerpt::before {
+    content: '>';
+    position: absolute;
+    top: clamp(16px, 2vw, 32px);
+    left: clamp(8px, 1vw, 16px);
+    color: #d99e2e;
+    opacity: 0.3;
+    font-size: clamp(16px, 1.6vw, 26px);
+  }
+
+  .prompt-excerpt .highlight {
+    color: #d99e2e;
+    font-weight: 700;
+  }
+
+  /* Explanation side */
+  .explanation {
+    flex: 0.9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(12px, 1.5vh, 24px);
+  }
+
+  .explanation h2 {
+    font-size: clamp(22px, 2.8vw, 44px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+  }
+
+  .explanation p {
+    font-size: clamp(15px, 1.5vw, 23px);
+    line-height: 1.6;
+    color: #9a9488;
+  }
+
+  .explanation .emoji-label {
+    font-size: clamp(28px, 3vw, 48px);
+    margin-bottom: 4px;
+  }
+
+  /* CTA panel (panel 5) */
+  .cta-panel {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 2vh, 28px);
+  }
+
+  .cta-panel h2 {
+    font-size: clamp(24px, 3vw, 48px);
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+  }
+
+  .cta-cards {
+    display: flex;
+    gap: clamp(12px, 1.5vw, 24px);
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .cta-card {
+    flex: 1;
+    background: #0e0e16;
+    border: 1px solid #252530;
+    border-radius: 12px;
+    padding: clamp(16px, 2vw, 32px);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .cta-card:hover {
+    border-color: #d99e2e;
+    transform: translateY(-4px);
+  }
+
+  .cta-card h3 {
+    font-size: clamp(15px, 1.5vw, 22px);
+    color: #d99e2e;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .cta-card p {
+    font-size: clamp(13px, 1.2vw, 18px);
+    color: #8a8578;
+    line-height: 1.55;
+  }
+
+  .cta-card .card-icon {
+    font-size: clamp(28px, 3vw, 44px);
+    margin-bottom: 8px;
+  }
+
+  /* Hint */
+  .hint {
+    position: fixed;
+    bottom: 1.5vh;
+    right: 2vw;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(10px, 0.9vw, 13px);
+    color: #3a3830;
+    z-index: 10;
+  }
+
+  .hint kbd {
+    display: inline-block;
+    background: #1a1a24;
+    border: 1px solid #2a2a38;
+    border-radius: 4px;
+    padding: 1px 8px;
+    margin: 0 2px;
+    font-family: inherit;
+  }
+</style>
+</head>
+<body>
+
+<div class="watermark">DECLASSIFIED</div>
+
+<div class="container">
+  <header>
+    <div class="stamp">DECLASSIFIED — SYSTEM PROMPT v2.1</div>
+    <h1>What's Inside Claude Code's Brain?</h1>
+    <p class="subtitle">// the system prompt — your AI's operating manual</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-panel="0">
+      <span class="tab-number">1</span>Engineer Mindset
+    </button>
+    <button class="tab" data-panel="1">
+      <span class="tab-number">2</span>Safety First
+    </button>
+    <button class="tab" data-panel="2">
+      <span class="tab-number">3</span>Keep It Simple
+    </button>
+    <button class="tab" data-panel="3">
+      <span class="tab-number">4</span>Tone &amp; Style
+    </button>
+    <button class="tab" data-panel="4">
+      <span class="tab-number">&#x2605;</span>What You Can Do
+    </button>
+  </nav>
+
+  <div class="panel-area">
+
+    <!-- Panel 1: Engineer Mindset -->
+    <div class="panel active" data-index="0">
+      <div class="prompt-box">
+        <div class="prompt-label">SYSTEM PROMPT — EXCERPT</div>
+        <div class="prompt-excerpt">
+          "The user will primarily request you to perform <span class="highlight">software engineering tasks</span>. These may include solving bugs, adding new functionality, <span class="highlight">refactoring code</span>, explaining code, and more. When given an unclear or generic instruction, consider it in the context of these <span class="highlight">software engineering tasks</span>."
+        </div>
+      </div>
+      <div class="explanation">
+        <div class="emoji-label">🔧</div>
+        <h2>It assumes you're a developer.</h2>
+        <p>Claude Code's very first instruction is about <em>software engineering</em>. If you're a copywriter, designer, or PM — it might over-engineer simple tasks. This isn't a bug. It's baked into its DNA.</p>
+      </div>
+    </div>
+
+    <!-- Panel 2: Safety First -->
+    <div class="panel" data-index="1">
+      <div class="prompt-box">
+        <div class="prompt-label">SYSTEM PROMPT — EXCERPT</div>
+        <div class="prompt-excerpt">
+          "Carefully consider the <span class="highlight">reversibility and blast radius</span> of actions. For actions that are hard to reverse, affect shared systems beyond your local environment, or could otherwise be <span class="highlight">risky or destructive</span>, check with the user before proceeding."
+        </div>
+      </div>
+      <div class="explanation">
+        <div class="emoji-label">🛡️</div>
+        <h2>It's told to ask permission.</h2>
+        <p>When Claude Code asks "Are you sure?" — it's not being annoying. It's following explicit instructions to protect you from irreversible actions. The phrase <em>"blast radius"</em> is literally in the prompt.</p>
+      </div>
+    </div>
+
+    <!-- Panel 3: Keep It Simple -->
+    <div class="panel" data-index="2">
+      <div class="prompt-box">
+        <div class="prompt-label">SYSTEM PROMPT — EXCERPT</div>
+        <div class="prompt-excerpt">
+          "<span class="highlight">Avoid over-engineering.</span> Only make changes that are directly requested or clearly necessary. Keep solutions simple and focused. <span class="highlight">Don't add features, refactor code, or make 'improvements' beyond what was asked.</span>"
+        </div>
+      </div>
+      <div class="explanation">
+        <div class="emoji-label">✂️</div>
+        <h2>Even it is told: don't over-engineer.</h2>
+        <p>Claude Code is explicitly instructed to stay focused and minimal. But its definition of "simple" is still through an engineer's lens — a simple shell script might not feel simple to you.</p>
+      </div>
+    </div>
+
+    <!-- Panel 4: Tone & Style -->
+    <div class="panel" data-index="3">
+      <div class="prompt-box">
+        <div class="prompt-label">SYSTEM PROMPT — EXCERPT</div>
+        <div class="prompt-excerpt">
+          "<span class="highlight">Go straight to the point.</span> Try the simplest approach first without going in circles. Be extra concise. Lead with the answer or action, <span class="highlight">not the reasoning.</span> Skip filler words, preamble, and unnecessary transitions."
+        </div>
+      </div>
+      <div class="explanation">
+        <div class="emoji-label">💬</div>
+        <h2>That's why it sounds so terse.</h2>
+        <p>Compared to claude.ai, Claude Code feels blunt. That's not a personality — it's a style instruction. It's told to skip the warmth and get to work. Great for code. Jarring for brainstorming.</p>
+      </div>
+    </div>
+
+    <!-- Panel 5: What You Can Do -->
+    <div class="panel cta-panel" data-index="4">
+      <h2>You Can Rewrite The Rules</h2>
+      <div class="cta-cards">
+        <div class="cta-card">
+          <div class="card-icon">📄</div>
+          <h3>CLAUDE.md</h3>
+          <p>Drop a file in your project root. Tell it your role, your style, your rules. This <strong>overrides</strong> the engineering defaults for everything in that folder.</p>
+        </div>
+        <div class="cta-card">
+          <div class="card-icon">🤝</div>
+          <h3>Cowork Mode</h3>
+          <p>A new way to use Claude Code that layers your own instructions on top. It makes Claude Code work for <strong>your workflow</strong> — not just engineering.</p>
+        </div>
+        <div class="cta-card">
+          <div class="card-icon">⚖️</div>
+          <h3>~4,000 words of prompt</h3>
+          <p>That's all Claude Code's system prompt is. Your CLAUDE.md can be just as long. You have the power to <strong>reshape</strong> how it thinks about your work.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="hint">
+  <kbd>←</kbd> <kbd>→</kbd> or click tabs to navigate
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  let current = 0;
+
+  function activate(index) {
+    if (index < 0 || index >= tabs.length) return;
+    current = index;
+    tabs.forEach((t, i) => t.classList.toggle('active', i === index));
+    panels.forEach((p, i) => p.classList.toggle('active', i === index));
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => activate(+tab.dataset.panel));
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); activate(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); activate(current - 1); }
+  });
+</script>
+</body>
+</html>
