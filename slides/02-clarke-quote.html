@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clarke Quote</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080808;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  .container {
+    text-align: center;
+    max-width: 70vw;
+    position: relative;
+  }
+
+  .quote {
+    color: #F5F0E8;
+    font-size: clamp(26px, 4vw, 52px);
+    font-style: italic;
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeIn 3s ease-out 0.5s forwards;
+  }
+
+  .quote .magic {
+    color: #C9A84C;
+    text-shadow: 0 0 30px rgba(201, 168, 76, 0.25);
+    transition: text-shadow 2s ease;
+  }
+
+  .attribution {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(14px, 1.6vw, 22px);
+    margin-top: 5vh;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: fadeIn 2s ease-out 3s forwards;
+  }
+
+  /* Open quote mark */
+  .quote-mark {
+    position: absolute;
+    top: -6vh;
+    left: -3vw;
+    font-size: clamp(60px, 10vw, 140px);
+    color: #7A5A10;
+    opacity: 0;
+    animation: fadeIn 2.5s ease-out 0.2s forwards;
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* Candle flame — recurring visual motif, slightly larger */
+  .flame-wrapper {
+    position: absolute;
+    bottom: 8vh;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: fadeIn 3s ease-out 4s forwards;
+  }
+
+  .flame {
+    width: 10px;
+    height: 34px;
+    background: radial-gradient(ellipse at bottom, #C9A84C 0%, #7A5A10 50%, transparent 100%);
+    border-radius: 50% 50% 30% 30%;
+    filter: blur(1.5px);
+    animation: flicker 3s ease-in-out infinite alternate;
+  }
+
+  .flame-glow {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 24px;
+    background: radial-gradient(ellipse, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes flicker {
+    0%   { transform: scaleY(1) scaleX(1); opacity: 0.9; }
+    25%  { transform: scaleY(1.06) scaleX(0.96); opacity: 1; }
+    50%  { transform: scaleY(0.94) scaleX(1.03); opacity: 0.85; }
+    75%  { transform: scaleY(1.03) scaleX(0.98); opacity: 0.95; }
+    100% { transform: scaleY(0.97) scaleX(1.01); opacity: 0.88; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="quote-mark">"</div>
+  <div class="quote">
+    Any sufficiently advanced technology is indistinguishable from <span class="magic">magic.</span>
+  </div>
+  <div class="attribution">— Arthur C. Clarke, 1973</div>
+</div>
+
+<div class="flame-wrapper">
+  <div class="flame"></div>
+  <div class="flame-glow"></div>
+</div>
+
+</body>
+</html>
