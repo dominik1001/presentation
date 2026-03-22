@@ -35,3 +35,4 @@ description: Create or update a single-file, fullscreen HTML slide for a live pr
 - A single named `.html` file.
 - Filename reflects the concept and start with a two digit representation of the slide number.
 - Use the `/slides` folder.
+- Add very small and low-contrast slide numbers on the bottom right. Make sure they are styled and layouted out exactly the same on each slide.
