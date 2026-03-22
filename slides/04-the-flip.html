@@ -192,7 +192,7 @@
 
 <div class="prompt" id="prompt">press →</div>
 
-<div class="slide-number">3 / 10</div>
+<div class="slide-number">4 / 10</div>
 
 <script>
   let flipped = false;
@@ -216,8 +216,8 @@
       return;
     }
 
-    if (e.key === 'ArrowRight' && flipped) window.location.href = '04-dominik.html';
-    if (e.key === 'ArrowLeft' && !flipped) window.location.href = '02-clarke-quote.html';
+    if (e.key === 'ArrowRight' && flipped) window.location.href = '05-live-conversation.html';
+    if (e.key === 'ArrowLeft' && !flipped) window.location.href = '03-clarke-quote.html';
     if (e.key === 'ArrowLeft' && flipped) {
       flipped = false;
       document.getElementById('after').classList.remove('visible');
