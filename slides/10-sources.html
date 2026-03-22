@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sources</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080808;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    position: relative;
+  }
+
+  .content {
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 2s ease-out 0.3s forwards;
+  }
+
+  .heading {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(13px, 1.4vw, 16px);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 5vh;
+  }
+
+  .source {
+    margin-bottom: 4vh;
+  }
+
+  .source-title {
+    color: #F5F0E8;
+    font-size: clamp(22px, 3vw, 36px);
+    font-style: italic;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.8vh;
+  }
+
+  .source-url {
+    color: #7A5A10;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: clamp(11px, 1.1vw, 14px);
+    letter-spacing: 0.02em;
+    word-break: break-all;
+  }
+
+  .slide-number {
+    position: fixed;
+    bottom: 2vh;
+    right: 2.5vw;
+    color: #2a2a2a;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="content">
+  <div class="heading">Sources</div>
+
+  <div class="source">
+    <div class="source-title">Claude (Code)</div>
+  </div>
+
+  <div class="source">
+    <div class="source-title">Claude Code System Prompt</div>
+    <div class="source-url">cchistory.mariozechner.at</div>
+  </div>
+</div>
+
+<div class="slide-number">10 / 10</div>
+
+<script>
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') {
+    window.location.href = '09-end.html';
+  }
+});
+</script>
+
+</body>
+</html>
