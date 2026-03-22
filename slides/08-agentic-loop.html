@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Agentic Loop</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080808;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    position: relative;
+  }
+
+  /* Stage 0: The question */
+  .question {
+    position: absolute;
+    color: #F5F0E8;
+    font-size: clamp(36px, 5vw, 64px);
+    font-style: italic;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1.5s ease, transform 1.5s ease;
+    z-index: 3;
+  }
+
+  .question.visible { opacity: 1; }
+  .question.fade-up { opacity: 0; transform: translateY(-40px); }
+  .question em { font-style: normal; color: #C9A84C; }
+
+  /* Stage 1: The loop */
+  .loop-container {
+    position: absolute;
+    width: clamp(320px, 50vw, 520px);
+    height: clamp(320px, 50vw, 520px);
+    opacity: 0;
+    transition: opacity 2s ease;
+    z-index: 2;
+  }
+
+  .loop-container.visible { opacity: 1; }
+
+  /* The circular track */
+  .loop-ring {
+    position: absolute;
+    inset: 0;
+  }
+
+  .loop-ring svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ring-path {
+    fill: none;
+    stroke: #7A5A10;
+    stroke-width: 1.5;
+    opacity: 0.4;
+  }
+
+  /* Traveling pulse */
+  .pulse-path {
+    fill: none;
+    stroke: #C9A84C;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 180 820;
+    stroke-dashoffset: 0;
+    filter: drop-shadow(0 0 12px rgba(201, 168, 76, 0.6));
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+
+  .pulse-path.animate {
+    opacity: 1;
+    animation: travelLoop 4s linear infinite;
+  }
+
+  @keyframes travelLoop {
+    from { stroke-dashoffset: 0; }
+    to   { stroke-dashoffset: -1000; }
+  }
+
+  /* Step nodes */
+  .step {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transform: translate(-50%, -50%);
+  }
+
+  .step-label {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(14px, 1.8vw, 22px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 1.2s ease, text-shadow 1.2s ease;
+    white-space: nowrap;
+  }
+
+  .step.active .step-label {
+    color: #C9A84C;
+    text-shadow: 0 0 30px rgba(201, 168, 76, 0.5);
+  }
+
+  .step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #7A5A10;
+    transition: background 1.2s ease, box-shadow 1.2s ease;
+  }
+
+  .step.active .step-dot {
+    background: #C9A84C;
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.6);
+  }
+
+  /* Position the 4 steps around the circle */
+  .step-think    { top: 2%;  left: 50%; }
+  .step-act      { top: 50%; left: 98%; }
+  .step-observe  { top: 98%; left: 50%; }
+  .step-repeat   { top: 50%; left: 2%;  }
+
+  .step-think .step-dot    { order: 1; }
+  .step-act .step-dot      { order: -1; }
+  .step-observe .step-dot  { order: -1; }
+  .step-repeat .step-dot   { order: 1; }
+
+  /* Annotations */
+  .annotation {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(12px, 1.3vw, 16px);
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    position: absolute;
+    white-space: nowrap;
+  }
+
+  .annotation.visible { opacity: 1; }
+
+  .ann-think   { top: -4%;  left: 50%; transform: translateX(-50%); text-align: center; }
+  .ann-act     { top: 50%;  left: 102%; transform: translateY(-50%); }
+  .ann-observe { top: 104%; left: 50%; transform: translateX(-50%); text-align: center; }
+  .ann-repeat  { top: 50%;  right: 102%; transform: translateY(-50%); text-align: right; }
+
+  .annotation .highlight { color: #C9A84C; }
+
+  /* Punchline */
+  .punchline {
+    position: absolute;
+    bottom: 10vh;
+    color: #C9A84C;
+    font-size: clamp(22px, 3vw, 42px);
+    font-style: italic;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transition: opacity 2s ease;
+    text-shadow: 0 0 50px rgba(201, 168, 76, 0.25);
+    z-index: 3;
+  }
+
+  .punchline.visible { opacity: 1; }
+
+  /* Navigation hint */
+  .nav-hint {
+    position: absolute;
+    bottom: 3vh;
+    right: 4vw;
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    animation: fadeIn 2s ease-out 1.5s forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 0.6; }
+  }
+
+  /* Sequential highlight animation for steps */
+  @keyframes highlightCycle {
+    0%, 100% { color: #C9A84C; text-shadow: 0 0 30px rgba(201, 168, 76, 0.5); }
+    25%      { color: #606060; text-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="question" id="question">How does it <em>think</em>?</div>
+
+<div class="loop-container" id="loopContainer">
+  <!-- Circular track -->
+  <div class="loop-ring">
+    <svg viewBox="0 0 500 500">
+      <circle class="ring-path" cx="250" cy="250" r="160" />
+      <circle class="pulse-path" id="pulse" cx="250" cy="250" r="160" />
+    </svg>
+  </div>
+
+  <!-- Step nodes -->
+  <div class="step step-think" id="stepThink">
+    <div class="step-label">Think</div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="step step-act" id="stepAct">
+    <div class="step-dot"></div>
+    <div class="step-label">Act</div>
+  </div>
+  <div class="step step-observe" id="stepObserve">
+    <div class="step-dot"></div>
+    <div class="step-label">Observe</div>
+  </div>
+  <div class="step step-repeat" id="stepRepeat">
+    <div class="step-label">Repeat</div>
+    <div class="step-dot"></div>
+  </div>
+
+  <!-- Annotations (stage 2) -->
+  <div class="annotation ann-think" id="annThink">Read the request, make a plan</div>
+  <div class="annotation ann-act" id="annAct">Call a tool — read, edit, run</div>
+  <div class="annotation ann-observe" id="annObserve">Check the result</div>
+  <div class="annotation ann-repeat" id="annRepeat">Until the task is done</div>
+</div>
+
+<div class="punchline" id="punchline">Not magic. Just a disciplined loop.</div>
+
+<div class="nav-hint" id="navHint">→</div>
+
+<script>
+  const question = document.getElementById('question');
+  const loopContainer = document.getElementById('loopContainer');
+  const pulse = document.getElementById('pulse');
+  const punchline = document.getElementById('punchline');
+
+  const steps = [
+    document.getElementById('stepThink'),
+    document.getElementById('stepAct'),
+    document.getElementById('stepObserve'),
+    document.getElementById('stepRepeat')
+  ];
+
+  const annotations = [
+    document.getElementById('annThink'),
+    document.getElementById('annAct'),
+    document.getElementById('annObserve'),
+    document.getElementById('annRepeat')
+  ];
+
+  let stage = 0;
+  const maxStage = 3;
+  let cycleInterval = null;
+
+  // Initial state
+  setTimeout(() => { question.classList.add('visible'); }, 300);
+
+  function startCycle() {
+    let current = 0;
+    steps[0].classList.add('active');
+
+    cycleInterval = setInterval(() => {
+      steps[current].classList.remove('active');
+      current = (current + 1) % 4;
+      steps[current].classList.add('active');
+    }, 1000);
+  }
+
+  function stopCycle() {
+    if (cycleInterval) {
+      clearInterval(cycleInterval);
+      cycleInterval = null;
+    }
+    steps.forEach(s => s.classList.remove('active'));
+  }
+
+  function forward() {
+    if (stage >= maxStage) {
+      window.location.href = '09-end.html';
+      return;
+    }
+    stage++;
+
+    if (stage === 1) {
+      question.classList.add('fade-up');
+      setTimeout(() => {
+        loopContainer.classList.add('visible');
+        pulse.classList.add('animate');
+        startCycle();
+      }, 800);
+    }
+
+    if (stage === 2) {
+      annotations.forEach((ann, i) => {
+        setTimeout(() => { ann.classList.add('visible'); }, i * 300);
+      });
+    }
+
+    if (stage === 3) {
+      punchline.classList.add('visible');
+    }
+  }
+
+  function backward() {
+    if (stage <= 0) {
+      window.location.href = '07-context-window.html';
+      return;
+    }
+
+    if (stage === 3) {
+      punchline.classList.remove('visible');
+      stage = 2;
+      return;
+    }
+
+    if (stage === 2) {
+      annotations.forEach(ann => ann.classList.remove('visible'));
+      stage = 1;
+      return;
+    }
+
+    if (stage === 1) {
+      stopCycle();
+      pulse.classList.remove('animate');
+      loopContainer.classList.remove('visible');
+      question.classList.remove('fade-up');
+      question.classList.add('visible');
+      stage = 0;
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') forward();
+    if (e.key === 'ArrowLeft') backward();
+  });
+</script>
+
+</body>
+</html>
