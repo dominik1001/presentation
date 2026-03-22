@@ -20,6 +20,7 @@ description: Create a single-file, fullscreen HTML slide for a live presentation
 - All colors, fonts, and styling come from `prestige-style`
 - One primary interaction per slide — clicking, typing, or watching
 - Always tell the user what to do (subtle prompt or label)
+- When asked to make an interactive slide only use the left and right arrow keys to trigger the interaction.
 
 ## Inputs to ask for before building
 1. **Concept** — what is the one idea this slide teaches?
