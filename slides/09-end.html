@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080808;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    position: relative;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(40px, 6vh, 72px);
+    opacity: 0;
+    animation: fadeIn 2s ease-out 0.3s forwards;
+  }
+
+  .title {
+    color: #F5F0E8;
+    font-size: clamp(36px, 5vw, 64px);
+    font-style: italic;
+    font-weight: normal;
+    letter-spacing: 0.03em;
+    text-align: center;
+  }
+
+  .title em {
+    font-style: normal;
+    color: #C9A84C;
+    text-shadow: 0 0 40px rgba(201, 168, 76, 0.2);
+  }
+
+  .qr-row {
+    display: flex;
+    gap: clamp(48px, 8vw, 120px);
+    align-items: flex-start;
+  }
+
+  .qr-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    opacity: 0;
+  }
+
+  .qr-card:nth-child(1) { animation: fadeIn 1.5s ease-out 1s forwards; }
+  .qr-card:nth-child(2) { animation: fadeIn 1.5s ease-out 1.4s forwards; }
+
+  .qr-frame {
+    width: clamp(140px, 18vw, 200px);
+    height: clamp(140px, 18vw, 200px);
+    border: 1px solid #7A5A10;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.6s ease, box-shadow 0.6s ease;
+  }
+
+  .qr-frame:hover {
+    border-color: #C9A84C;
+    box-shadow: 0 0 30px rgba(201, 168, 76, 0.15);
+  }
+
+  .qr-frame canvas {
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+  }
+
+  .qr-label {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(13px, 1.4vw, 17px);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.6s ease;
+  }
+
+  .qr-card:hover .qr-label {
+    color: #C9A84C;
+  }
+
+  .speaker {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(14px, 1.5vw, 18px);
+    letter-spacing: 0.12em;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 1.5s ease-out 2s forwards;
+  }
+
+  .speaker .name {
+    color: #F5F0E8;
+  }
+
+  .nav-hint {
+    position: absolute;
+    bottom: 3vh;
+    left: 4vw;
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    animation: fadeIn 2s ease-out 2.5s forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 0.6; }
+  }
+
+  .content { animation-fill-mode: forwards; }
+  .content { animation: contentFade 2s ease-out 0.3s forwards; }
+  @keyframes contentFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="content">
+  <div class="title">Thank you. <em>Questions?</em></div>
+
+  <div class="qr-row">
+    <div class="qr-card">
+      <div class="qr-frame">
+        <canvas id="qrLinkedin"></canvas>
+      </div>
+      <div class="qr-label">LinkedIn</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-frame">
+        <canvas id="qrRepo"></canvas>
+      </div>
+      <div class="qr-label">This Talk</div>
+    </div>
+  </div>
+
+  <div class="speaker"><span class="name">Dominik Grusemann</span> · Marbles AI</div>
+</div>
+
+<div class="nav-hint">←</div>
+
+<script>
+// Minimal QR Code generator (Mode Byte, ECC L, Version 1-6)
+// Adapted for self-contained use — no external dependencies
+const QR = (() => {
+  const EC_CODEWORDS = [0,7,10,15,20,26,18];
+  const TOTAL_CODEWORDS = [0,26,44,70,100,134,172];
+  const ALIGNMENT = [0,[],[6,18],[6,22],[6,26],[6,30],[6,34]];
+  const SIZE = v => v * 4 + 17;
+
+  function encode(text) {
+    const data = new TextEncoder().encode(text);
+    let version = 1;
+    for (; version <= 6; version++) {
+      const capacity = TOTAL_CODEWORDS[version] - EC_CODEWORDS[version] - (version < 10 ? 2 : 3);
+      if (data.length <= capacity) break;
+    }
+    if (version > 6) throw new Error('Too long');
+
+    const totalDC = TOTAL_CODEWORDS[version] - EC_CODEWORDS[version];
+    const bits = [];
+    const push = (val, len) => { for (let i = len - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+
+    push(0b0100, 4); // byte mode
+    push(data.length, version < 10 ? 8 : 16);
+    for (const b of data) push(b, 8);
+
+    const totalBits = totalDC * 8;
+    while (bits.length < totalBits && bits.length < totalBits) {
+      const rem = totalBits - bits.length;
+      if (rem >= 4) push(0, 4);
+      else push(0, rem);
+    }
+    while (bits.length % 8) bits.push(0);
+    const pads = [0xEC, 0x11];
+    let pi = 0;
+    while (bits.length < totalBits) { push(pads[pi], 8); pi ^= 1; }
+
+    const codewords = [];
+    for (let i = 0; i < bits.length; i += 8) {
+      let b = 0;
+      for (let j = 0; j < 8; j++) b = (b << 1) | (bits[i + j] || 0);
+      codewords.push(b);
+    }
+
+    const ecCount = EC_CODEWORDS[version];
+    const ec = rsEncode(codewords, ecCount);
+
+    const final = [...codewords, ...ec];
+    return placeData(version, final);
+  }
+
+  function gf256Mul(a, b) {
+    if (a === 0 || b === 0) return 0;
+    return EXP[(LOG[a] + LOG[b]) % 255];
+  }
+
+  const EXP = new Uint8Array(256);
+  const LOG = new Uint8Array(256);
+  (() => {
+    let v = 1;
+    for (let i = 0; i < 255; i++) {
+      EXP[i] = v;
+      LOG[v] = i;
+      v <<= 1;
+      if (v >= 256) v ^= 0x11d;
+    }
+    EXP[255] = EXP[0];
+  })();
+
+  function rsEncode(data, ecLen) {
+    const gen = [1];
+    for (let i = 0; i < ecLen; i++) {
+      const newGen = new Array(gen.length + 1).fill(0);
+      for (let j = 0; j < gen.length; j++) {
+        newGen[j] ^= gen[j];
+        newGen[j + 1] ^= gf256Mul(gen[j], EXP[i]);
+      }
+      gen.length = 0;
+      gen.push(...newGen);
+    }
+
+    const msg = new Uint8Array(data.length + ecLen);
+    msg.set(data);
+    for (let i = 0; i < data.length; i++) {
+      const coef = msg[i];
+      if (coef !== 0) {
+        for (let j = 0; j < gen.length; j++) {
+          msg[i + j] ^= gf256Mul(gen[j], coef);
+        }
+      }
+    }
+    return Array.from(msg.slice(data.length));
+  }
+
+  function placeData(version, data) {
+    const size = SIZE(version);
+    const grid = Array.from({length: size}, () => new Uint8Array(size));
+    const reserved = Array.from({length: size}, () => new Uint8Array(size));
+
+    function setModule(r, c, val) {
+      if (r >= 0 && r < size && c >= 0 && c < size) {
+        grid[r][c] = val ? 1 : 0;
+        reserved[r][c] = 1;
+      }
+    }
+
+    // Finder patterns
+    function finderPattern(row, col) {
+      for (let r = -1; r <= 7; r++) {
+        for (let c = -1; c <= 7; c++) {
+          const inOuter = r >= 0 && r <= 6 && c >= 0 && c <= 6;
+          const inInner = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+          const onBorder = r === 0 || r === 6 || c === 0 || c === 6;
+          const val = inOuter && (onBorder || inInner);
+          setModule(row + r, col + c, val);
+        }
+      }
+    }
+
+    finderPattern(0, 0);
+    finderPattern(0, size - 7);
+    finderPattern(size - 7, 0);
+
+    // Timing patterns
+    for (let i = 8; i < size - 8; i++) {
+      setModule(6, i, i % 2 === 0);
+      setModule(i, 6, i % 2 === 0);
+    }
+
+    // Alignment patterns
+    const alPos = ALIGNMENT[version];
+    for (const r of alPos) {
+      for (const c of alPos) {
+        if (reserved[r][c]) continue;
+        for (let dr = -2; dr <= 2; dr++) {
+          for (let dc = -2; dc <= 2; dc++) {
+            const val = Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0);
+            setModule(r + dr, c + dc, val);
+          }
+        }
+      }
+    }
+
+    // Reserve format info areas
+    for (let i = 0; i < 8; i++) {
+      if (!reserved[8][i]) { reserved[8][i] = 1; }
+      if (!reserved[i][8]) { reserved[i][8] = 1; }
+      if (!reserved[8][size - 1 - i]) { reserved[8][size - 1 - i] = 1; }
+      if (!reserved[size - 1 - i][8]) { reserved[size - 1 - i][8] = 1; }
+    }
+    reserved[8][8] = 1;
+    setModule(size - 8, 8, 1); // dark module
+
+    // Place data bits
+    const dataBits = [];
+    for (const b of data) {
+      for (let i = 7; i >= 0; i--) dataBits.push((b >> i) & 1);
+    }
+
+    let bitIdx = 0;
+    for (let right = size - 1; right >= 1; right -= 2) {
+      if (right === 6) right = 5;
+      for (let vert = 0; vert < size; vert++) {
+        for (let j = 0; j < 2; j++) {
+          const col = right - j;
+          const upward = ((right + 1) / 2 | 0) % 2 === (version < 7 ? 1 : 0);
+          const row = upward ? size - 1 - vert : vert;
+          if (!reserved[row][col] && bitIdx < dataBits.length) {
+            grid[row][col] = dataBits[bitIdx++];
+          }
+        }
+      }
+    }
+
+    // Apply mask (mask 0: (r+c)%2==0) and format info
+    let bestGrid = null;
+    let bestPenalty = Infinity;
+
+    for (let mask = 0; mask < 8; mask++) {
+      const masked = grid.map(r => new Uint8Array(r));
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (reserved[r][c]) continue;
+          let flip = false;
+          switch (mask) {
+            case 0: flip = (r + c) % 2 === 0; break;
+            case 1: flip = r % 2 === 0; break;
+            case 2: flip = c % 3 === 0; break;
+            case 3: flip = (r + c) % 3 === 0; break;
+            case 4: flip = (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0; break;
+            case 5: flip = (r * c) % 2 + (r * c) % 3 === 0; break;
+            case 6: flip = ((r * c) % 2 + (r * c) % 3) % 2 === 0; break;
+            case 7: flip = ((r + c) % 2 + (r * c) % 3) % 2 === 0; break;
+          }
+          if (flip) masked[r][c] ^= 1;
+        }
+      }
+
+      // Format info (ECC L = 01, mask pattern)
+      const formatBits = applyFormat(masked, size, 0b01, mask);
+      const penalty = calcPenalty(masked, size);
+      if (penalty < bestPenalty) {
+        bestPenalty = penalty;
+        bestGrid = masked;
+      }
+    }
+
+    return bestGrid;
+  }
+
+  function applyFormat(grid, size, ecl, mask) {
+    let data = (ecl << 3) | mask;
+    let rem = data;
+    for (let i = 0; i < 10; i++) {
+      rem = (rem << 1) ^ ((rem >> 9) * 0b10100110111);
+    }
+    const bits = ((data << 10) | rem) ^ 0b101010000010010;
+
+    const positions1 = [[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[7,8],[8,8],[8,7],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0]];
+    const positions2 = [[8,size-1],[8,size-2],[8,size-3],[8,size-4],[8,size-5],[8,size-6],[8,size-7],[8,size-8],[size-7,8],[size-6,8],[size-5,8],[size-4,8],[size-3,8],[size-2,8],[size-1,8]];
+
+    for (let i = 0; i < 15; i++) {
+      const bit = (bits >> (14 - i)) & 1;
+      grid[positions1[i][0]][positions1[i][1]] = bit;
+      grid[positions2[i][0]][positions2[i][1]] = bit;
+    }
+  }
+
+  function calcPenalty(grid, size) {
+    let penalty = 0;
+    // Simplified penalty: count dark/light balance
+    let dark = 0;
+    for (let r = 0; r < size; r++)
+      for (let c = 0; c < size; c++)
+        if (grid[r][c]) dark++;
+    const total = size * size;
+    const pct = Math.abs(dark / total - 0.5);
+    penalty += Math.floor(pct * 20) * 10;
+
+    // Run penalty
+    for (let r = 0; r < size; r++) {
+      let run = 1;
+      for (let c = 1; c < size; c++) {
+        if (grid[r][c] === grid[r][c-1]) { run++; }
+        else { if (run >= 5) penalty += run - 2; run = 1; }
+      }
+      if (run >= 5) penalty += run - 2;
+    }
+    for (let c = 0; c < size; c++) {
+      let run = 1;
+      for (let r = 1; r < size; r++) {
+        if (grid[r][c] === grid[r-1][c]) { run++; }
+        else { if (run >= 5) penalty += run - 2; run = 1; }
+      }
+      if (run >= 5) penalty += run - 2;
+    }
+    return penalty;
+  }
+
+  return { encode };
+})();
+
+function drawQR(canvasId, text) {
+  const canvas = document.getElementById(canvasId);
+  const modules = QR.encode(text);
+  const size = modules.length;
+  const scale = 4;
+  canvas.width = size * scale;
+  canvas.height = size * scale;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#F5F0E8';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Modules
+  ctx.fillStyle = '#080808';
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (modules[r][c]) {
+        ctx.fillRect(c * scale, r * scale, scale, scale);
+      }
+    }
+  }
+}
+
+drawQR('qrLinkedin', 'https://www.linkedin.com/in/dominikgrusemann/');
+drawQR('qrRepo', 'https://github.com/dominik1001/presentation');
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') {
+    window.location.href = '08-agentic-loop.html';
+  }
+});
+</script>
+
+</body>
+</html>
