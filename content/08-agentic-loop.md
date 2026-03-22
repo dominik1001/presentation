@@ -1,5 +1,5 @@
 ---
-slide: 09
+slide: 08
 title: The Agentic Loop
 type: interactive
 notes: Explain the agentic loop — how Claude Code thinks, acts, observes, and repeats

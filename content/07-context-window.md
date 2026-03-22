@@ -1,5 +1,5 @@
 ---
-slide: 08
+slide: 07
 title: The Context Window
 type: interactive
 notes: Start with the basics of the context window, then introduce the "Lost in the middle" phenomenon and what to do about it.
