@@ -28,4 +28,6 @@ description: Create a single-file, fullscreen HTML slide for a live presentation
 3. **Feeling** — what should they feel after interacting with it?
 
 ## Output
-A single named `.html` file. Filename reflects the concept. Use the `/slides` folder.
+- A single named `.html` file.
+- Filename reflects the concept and start with a two digit representation of the slide number.
+- Use the `/slides` folder.
