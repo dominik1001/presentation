@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Conversation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080808;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    position: relative;
+  }
+
+  /* Background image — hand holding candle */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background: url('../content/assets/05-hand-candle.png') center center / cover no-repeat;
+    opacity: 0;
+    animation: fadeInSlow 3s ease-out 0.2s forwards;
+  }
+
+  /* Darken edges so text reads clearly */
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(8,8,8,0.2) 0%, rgba(8,8,8,0.85) 70%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 2s ease-out 1.8s forwards;
+  }
+
+  .heading {
+    color: #F5F0E8;
+    font-size: clamp(32px, 5vw, 64px);
+    font-style: italic;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+
+  .heading em {
+    font-style: normal;
+    color: #C9A84C;
+    text-shadow: 0 0 40px rgba(201, 168, 76, 0.3);
+  }
+
+  /* Terminal cursor blink — signals "going live" */
+  .cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.85em;
+    background: #C9A84C;
+    margin-left: 6px;
+    vertical-align: baseline;
+    animation: blink 1.1s step-end infinite 3.6s;
+    opacity: 0;
+    animation: cursorAppear 0.5s ease-out 3.6s forwards, blink 1.1s step-end infinite 3.6s;
+  }
+
+  .label {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(14px, 1.6vw, 22px);
+    letter-spacing: 0.06em;
+    margin-top: 4vh;
+    opacity: 0;
+    animation: fadeIn 2s ease-out 3s forwards;
+  }
+
+  @keyframes fadeInSlow {
+    from { opacity: 0; }
+    to   { opacity: 0.55; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes cursorAppear {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="content">
+  <div class="heading">Let me <em>show</em> you.<span class="cursor"></span></div>
+  <div class="label">live conversation</div>
+</div>
+
+<script>
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') window.location.href = '06-system-prompt.html';
+    if (e.key === 'ArrowLeft') window.location.href = '04-dominik.html';
+  });
+</script>
+
+</body>
+</html>
