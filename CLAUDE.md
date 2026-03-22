@@ -31,3 +31,7 @@ https://luma.com/5abx5e5u?tk=yEGUVl
 
 The audience uses Claude Code daily but sees it as a black box.
 The talk demystifies it. Three concepts, ten minutes, one story.
+
+## Content
+
+The content of the presentation is found under `/content`.
