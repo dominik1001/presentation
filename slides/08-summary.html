@@ -1,191 +1,251 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Three Things to Remember</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Three Things to Remember</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-  body {
-    background: #080808;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Georgia, 'Times New Roman', serif;
-    position: relative;
-  }
+            body {
+                background: #080808;
+                height: 100vh;
+                width: 100vw;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: Georgia, "Times New Roman", serif;
+                position: relative;
+            }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(4vh, 5vh, 6vh);
-    max-width: 80vw;
-  }
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                width: clamp(500px, 60vw, 900px);
+            }
 
-  /* Each learning row */
-  .learning {
-    display: flex;
-    align-items: center;
-    gap: clamp(24px, 3vw, 48px);
-    opacity: 0;
-    transform: translateY(12px);
-  }
+            /* Each learning row — use CSS grid for vertical alignment */
+            .learning {
+                display: grid;
+                grid-template-columns: clamp(48px, 6vw, 80px) 1fr;
+                align-items: center;
+                gap: clamp(20px, 2.5vw, 40px);
+                opacity: 0;
+                transform: translateY(12px);
+                transition:
+                    opacity 1.2s ease-out,
+                    transform 1.2s ease-out;
+            }
 
-  .learning.visible {
-    animation: fadeIn 1.8s ease-out forwards;
-  }
+            .learning.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-  .learning-number {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(48px, 7vw, 96px);
-    color: #C9A84C;
-    opacity: 0.35;
-    line-height: 1;
-    flex-shrink: 0;
-    min-width: clamp(48px, 6vw, 80px);
-    text-align: center;
-    user-select: none;
-  }
+            .learning-number {
+                font-family: Georgia, "Times New Roman", serif;
+                font-size: clamp(48px, 7vw, 96px);
+                color: #c9a84c;
+                opacity: 0.35;
+                line-height: 1;
+                text-align: center;
+                user-select: none;
+            }
 
-  .learning-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6vh;
-  }
+            .learning-text {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5vh;
+            }
 
-  .learning-title {
-    color: #F5F0E8;
-    font-size: clamp(24px, 3vw, 42px);
-    font-weight: normal;
-    letter-spacing: 0.02em;
-  }
+            .learning-title {
+                color: #f5f0e8;
+                font-size: clamp(24px, 3vw, 42px);
+                font-weight: normal;
+                letter-spacing: 0.02em;
+            }
 
-  .learning-desc {
-    color: #606060;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(14px, 1.5vw, 20px);
-    letter-spacing: 0.03em;
-    line-height: 1.4;
-  }
+            .learning-desc {
+                color: #606060;
+                font-family: Calibri, Arial, sans-serif;
+                font-size: clamp(14px, 1.5vw, 20px);
+                letter-spacing: 0.03em;
+                line-height: 1.4;
+            }
 
-  /* Dividers */
-  .divider {
-    width: clamp(200px, 40vw, 500px);
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #7A5A10 50%, transparent);
-    opacity: 0;
-    transform: scaleX(0.3);
-  }
+            /* Dividers — aligned with text column */
+            .divider {
+                display: grid;
+                grid-template-columns: clamp(48px, 6vw, 80px) 1fr;
+                gap: clamp(20px, 2.5vw, 40px);
+                padding: clamp(16px, 2.5vh, 28px) 0;
+                opacity: 0;
+                transition: opacity 1s ease-out;
+            }
 
-  .divider.visible {
-    animation: dividerIn 1.6s ease-out forwards;
-  }
+            .divider.visible {
+                opacity: 1;
+            }
 
-  /* Bottom quote */
-  .closing-quote {
-    margin-top: clamp(2vh, 3vh, 4vh);
-    color: #F5F0E8;
-    font-size: clamp(18px, 2.2vw, 32px);
-    font-style: italic;
-    letter-spacing: 0.02em;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(8px);
-  }
+            .divider-line {
+                height: 1px;
+                background: linear-gradient(
+                    90deg,
+                    #7a5a10 0%,
+                    transparent 100%
+                );
+                opacity: 0.4;
+                align-self: center;
+            }
 
-  .closing-quote.visible {
-    animation: fadeIn 2.5s ease-out forwards;
-  }
+            /* Bottom quote */
+            .closing-quote {
+                margin-top: clamp(5vh, 7vh, 9vh);
+                color: #f5f0e8;
+                font-size: clamp(18px, 2.2vw, 32px);
+                font-style: italic;
+                letter-spacing: 0.02em;
+                text-align: center;
+                opacity: 0;
+                transform: translateY(8px);
+                transition:
+                    opacity 2s ease-out,
+                    transform 2s ease-out;
+            }
 
-  .closing-quote .gold {
-    color: #C9A84C;
-    text-shadow: 0 0 40px rgba(201, 168, 76, 0.2);
-  }
+            .closing-quote.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-  .slide-number {
-    position: fixed;
-    bottom: 2vh;
-    right: 2.5vw;
-    color: #2a2a2a;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    user-select: none;
-  }
+            .closing-quote .gold {
+                color: #c9a84c;
+                text-shadow: 0 0 40px rgba(201, 168, 76, 0.2);
+            }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+            .slide-number {
+                position: fixed;
+                bottom: 2vh;
+                right: 2.5vw;
+                color: #2a2a2a;
+                font-family: Calibri, Arial, sans-serif;
+                font-size: 12px;
+                letter-spacing: 0.05em;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="learning" id="l1">
+                <div class="learning-number">1</div>
+                <div class="learning-text">
+                    <div class="learning-title">The System Prompt</div>
+                    <div class="learning-desc">
+                        Use the right tool for the task. Adapt the prompt to the
+                        task at hand.
+                    </div>
+                </div>
+            </div>
 
-  @keyframes dividerIn {
-    from { opacity: 0; transform: scaleX(0.3); }
-    to   { opacity: 0.5; transform: scaleX(1); }
-  }
-</style>
-</head>
-<body>
+            <div class="divider" id="d1">
+                <div></div>
+                <div class="divider-line"></div>
+            </div>
 
-<div class="container">
-  <div class="learning" id="l1">
-    <div class="learning-number">1</div>
-    <div class="learning-text">
-      <div class="learning-title">The System Prompt</div>
-      <div class="learning-desc">Hidden instructions that shape behavior. You can read and influence them.</div>
-    </div>
-  </div>
+            <div class="learning" id="l2">
+                <div class="learning-number">2</div>
+                <div class="learning-text">
+                    <div class="learning-title">The Context Window</div>
+                    <div class="learning-desc">
+                        When your context gets full, the model gets stupid.
+                        Start fresh.
+                    </div>
+                </div>
+            </div>
 
-  <div class="divider" id="d1"></div>
+            <div class="divider" id="d2">
+                <div></div>
+                <div class="divider-line"></div>
+            </div>
 
-  <div class="learning" id="l2">
-    <div class="learning-number">2</div>
-    <div class="learning-text">
-      <div class="learning-title">The Context Window</div>
-      <div class="learning-desc">When your context gets full, the model gets stupid. Start fresh.</div>
-    </div>
-  </div>
+            <div class="learning" id="l3">
+                <div class="learning-number">3</div>
+                <div class="learning-text">
+                    <div class="learning-title">The Agentic Loop</div>
+                    <div class="learning-desc">
+                        Think in loops. Give it the right tools.
+                    </div>
+                </div>
+            </div>
 
-  <div class="divider" id="d2"></div>
+            <div class="closing-quote" id="quote">
+                Any technology you understand is
+                <span class="gold">no longer magic.</span>
+            </div>
+        </div>
 
-  <div class="learning" id="l3">
-    <div class="learning-number">3</div>
-    <div class="learning-text">
-      <div class="learning-title">The Agentic Loop</div>
-      <div class="learning-desc">Think in loops. Give it the right tools.</div>
-    </div>
-  </div>
+        <div class="slide-number">8 / 10</div>
 
-  <div class="closing-quote" id="quote">
-    Any technology you understand is <span class="gold">no longer magic.</span>
-  </div>
-</div>
+        <script>
+            // Steps: arrow-right reveals each learning (with its preceding divider), then the quote
+            // Arrow-left reverses. Navigation to adjacent slides only at boundaries.
+            const reveals = [
+                ["l1"], // step 0: show learning 1
+                ["d1", "l2"], // step 1: show divider + learning 2
+                ["d2", "l3"], // step 2: show divider + learning 3
+                ["quote"], // step 3: show closing quote
+            ];
 
-<div class="slide-number">8 / 10</div>
+            let currentStep = -1;
 
-<script>
-  const items = [
-    { el: document.getElementById('l1'), delay: 300 },
-    { el: document.getElementById('d1'), delay: 900 },
-    { el: document.getElementById('l2'), delay: 1200 },
-    { el: document.getElementById('d2'), delay: 1800 },
-    { el: document.getElementById('l3'), delay: 2100 },
-    { el: document.getElementById('quote'), delay: 3200 },
-  ];
+            function showStep(step) {
+                reveals[step].forEach((id) => {
+                    document.getElementById(id).classList.add("visible");
+                });
+            }
 
-  items.forEach(({ el, delay }) => {
-    setTimeout(() => { el.classList.add('visible'); }, delay);
-  });
+            function hideStep(step) {
+                reveals[step].forEach((id) => {
+                    document.getElementById(id).classList.remove("visible");
+                });
+            }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') window.location.href = '07-agentic-loop.html';
-    if (e.key === 'ArrowRight') window.location.href = '09-end.html';
-  });
-</script>
+            function forward() {
+                const nextStep = currentStep + 1;
+                if (nextStep >= reveals.length) {
+                    window.location.href = "09-end.html";
+                    return;
+                }
+                currentStep = nextStep;
+                showStep(currentStep);
+            }
 
-</body>
+            function backward() {
+                if (currentStep < 0) {
+                    window.location.href = "07-agentic-loop.html";
+                    return;
+                }
+                hideStep(currentStep);
+                currentStep--;
+            }
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowRight") {
+                    e.preventDefault();
+                    forward();
+                }
+                if (e.key === "ArrowLeft") {
+                    e.preventDefault();
+                    backward();
+                }
+            });
+        </script>
+    </body>
 </html>
