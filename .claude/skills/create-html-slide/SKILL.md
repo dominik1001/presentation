@@ -1,6 +1,6 @@
 ---
 name: create-html-slide
-description: Create, update, or delete a single-file, fullscreen HTML slide for a live presentation.
+description: Create, recreate, update, or delete a single-file, fullscreen HTML slide for a live presentation.
 ---
 
 **Default style:** Always apply the `prestige-style` skill (colors, typography, layout rules) unless the user explicitly overrides it.
@@ -20,6 +20,9 @@ description: Create, update, or delete a single-file, fullscreen HTML slide for 
 - All colors, fonts, and styling come from `prestige-style`
 - One primary interaction per slide — clicking, typing, or watching
 - Always tell the user what to do (subtle prompt or label)
+
+## Tools
+- When asked to create a new slide or recreate an existing one do a quick online search about ideas for the content. Give the user three options to choose from.
 
 ## Interaction & Navigation
 - Arrow keys are the only mechanism — no clicks, no other keys.
