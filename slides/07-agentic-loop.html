@@ -9,199 +9,14 @@
 
   body {
     background: #080808;
+    margin: 0;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-family: Georgia, 'Times New Roman', serif;
     position: relative;
   }
 
-  /* Stage 0: The question */
-  .question {
-    position: absolute;
-    color: #F5F0E8;
-    font-size: clamp(36px, 5vw, 64px);
-    font-style: italic;
-    font-weight: normal;
-    letter-spacing: 0.02em;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 1.5s ease, transform 1.5s ease;
-    z-index: 3;
-  }
-
-  .question.visible { opacity: 1; }
-  .question.fade-up { opacity: 0; transform: translateY(-40px); }
-  .question em { font-style: normal; color: #C9A84C; }
-
-  /* Stage 1: The loop */
-  .loop-container {
-    position: absolute;
-    width: clamp(320px, 50vw, 520px);
-    height: clamp(320px, 50vw, 520px);
-    opacity: 0;
-    transition: opacity 2s ease;
-    z-index: 2;
-  }
-
-  .loop-container.visible { opacity: 1; }
-
-  /* The circular track */
-  .loop-ring {
-    position: absolute;
-    inset: 0;
-  }
-
-  .loop-ring svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .ring-path {
-    fill: none;
-    stroke: #7A5A10;
-    stroke-width: 1.5;
-    opacity: 0.4;
-  }
-
-  /* Traveling pulse */
-  .pulse-path {
-    fill: none;
-    stroke: #C9A84C;
-    stroke-width: 3;
-    stroke-linecap: round;
-    stroke-dasharray: 180 820;
-    stroke-dashoffset: 0;
-    filter: drop-shadow(0 0 12px rgba(201, 168, 76, 0.6));
-    opacity: 0;
-    transition: opacity 1.5s ease;
-  }
-
-  .pulse-path.animate {
-    opacity: 1;
-    animation: travelLoop 4s linear infinite;
-  }
-
-  @keyframes travelLoop {
-    from { stroke-dashoffset: 0; }
-    to   { stroke-dashoffset: -1000; }
-  }
-
-  /* Step nodes */
-  .step {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    transform: translate(-50%, -50%);
-  }
-
-  .step-label {
-    color: #606060;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(14px, 1.8vw, 22px);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    transition: color 1.2s ease, text-shadow 1.2s ease;
-    white-space: nowrap;
-  }
-
-  .step.active .step-label {
-    color: #C9A84C;
-    text-shadow: 0 0 30px rgba(201, 168, 76, 0.5);
-  }
-
-  .step-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #7A5A10;
-    transition: background 1.2s ease, box-shadow 1.2s ease;
-  }
-
-  .step.active .step-dot {
-    background: #C9A84C;
-    box-shadow: 0 0 20px rgba(201, 168, 76, 0.6);
-  }
-
-  /* Position the 4 steps around the circle */
-  .step-think    { top: 2%;  left: 50%; }
-  .step-act      { top: 50%; left: 98%; }
-  .step-observe  { top: 98%; left: 50%; }
-  .step-repeat   { top: 50%; left: 2%;  }
-
-  .step-think .step-dot    { order: 1; }
-  .step-act .step-dot      { order: -1; }
-  .step-observe .step-dot  { order: -1; }
-  .step-repeat .step-dot   { order: 1; }
-
-  /* Annotations */
-  .annotation {
-    color: #606060;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(12px, 1.3vw, 16px);
-    line-height: 1.5;
-    opacity: 0;
-    transition: opacity 1.5s ease;
-    position: absolute;
-    white-space: nowrap;
-  }
-
-  .annotation.visible { opacity: 1; }
-
-  .ann-think   { top: -4%;  left: 50%; transform: translateX(-50%); text-align: center; }
-  .ann-act     { top: 50%;  left: 102%; transform: translateY(-50%); }
-  .ann-observe { top: 104%; left: 50%; transform: translateX(-50%); text-align: center; }
-  .ann-repeat  { top: 50%;  right: 102%; transform: translateY(-50%); text-align: right; }
-
-  .annotation .highlight { color: #C9A84C; }
-
-  /* Punchline */
-  .punchline {
-    position: absolute;
-    bottom: 10vh;
-    color: #C9A84C;
-    font-size: clamp(22px, 3vw, 42px);
-    font-style: italic;
-    letter-spacing: 0.03em;
-    opacity: 0;
-    transition: opacity 2s ease;
-    text-shadow: 0 0 50px rgba(201, 168, 76, 0.25);
-    z-index: 3;
-  }
-
-  .punchline.visible { opacity: 1; }
-
-  /* Navigation hint */
-  .nav-hint {
-    position: absolute;
-    bottom: 3vh;
-    right: 4vw;
-    color: #606060;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: 14px;
-    letter-spacing: 0.08em;
-    opacity: 0;
-    animation: fadeIn 2s ease-out 1.5s forwards;
-  }
-
-  .slide-number {
-    position: fixed;
-    bottom: 2vh;
-    right: 2.5vw;
-    color: #2a2a2a;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    user-select: none;
-    z-index: 4;
-  }
-
-  /* Concept number */
   .concept-number {
     position: fixed;
     top: 4vh;
@@ -216,168 +31,666 @@
     z-index: 1;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 0.6; }
+  .slide-number {
+    position: fixed;
+    bottom: 2vh;
+    right: 2.5vw;
+    color: #2a2a2a;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    user-select: none;
+    z-index: 4;
   }
 
-  /* Sequential highlight animation for steps */
-  @keyframes highlightCycle {
-    0%, 100% { color: #C9A84C; text-shadow: 0 0 30px rgba(201, 168, 76, 0.5); }
-    25%      { color: #606060; text-shadow: none; }
+  .title {
+    position: absolute;
+    top: 8vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #F5F0E8;
+    font-size: clamp(32px, 4.5vw, 56px);
+    font-weight: normal;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    z-index: 3;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .title.visible { opacity: 1; }
+  .title.dimmed { opacity: 0.15; }
+
+  /* Main layout: diagram left, terminal right */
+  .main-layout {
+    position: absolute;
+    top: 20vh;
+    left: 6vw;
+    right: 4vw;
+    bottom: 6vh;
+    display: flex;
+    gap: 4vw;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 3;
+  }
+
+  .main-layout.visible { opacity: 1; }
+  .main-layout.hidden { opacity: 0; }
+
+  /* ---- Diagram (left side) ---- */
+  .diagram {
+    flex: 0 0 22vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .diagram-step {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 1.2vw, 18px);
+    opacity: 0.25;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: translateX(-8px);
+  }
+
+  .diagram-step.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .diagram-step.visited {
+    opacity: 0.45;
+    transform: translateX(0);
+  }
+
+  .step-dot {
+    width: clamp(38px, 3.5vw, 52px);
+    height: clamp(38px, 3.5vw, 52px);
+    border-radius: 50%;
+    border: 2px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
+    background: #080808;
+  }
+
+  .step-dot .dot-icon {
+    font-size: clamp(16px, 1.6vw, 22px);
+    transition: opacity 0.8s ease;
+    opacity: 0.4;
+  }
+
+  .diagram-step.active .step-dot {
+    border-color: #C9A84C;
+    box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+    background: #0e0c08;
+  }
+
+  .diagram-step.active .step-dot .dot-icon { opacity: 1; }
+
+  .diagram-step.visited .step-dot {
+    border-color: #7A5A10;
+  }
+
+  .diagram-step.visited .step-dot .dot-icon { opacity: 0.5; }
+
+  .step-label {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(18px, 2vw, 28px);
+    color: #606060;
+    transition: color 0.8s ease;
+    white-space: nowrap;
+  }
+
+  .diagram-step.active .step-label { color: #C9A84C; }
+  .diagram-step.visited .step-label { color: #7A5A10; }
+
+  /* Arrows between steps */
+  .diagram-arrow {
+    color: #2a2a2a;
+    font-size: clamp(18px, 1.8vw, 26px);
+    line-height: 1;
+    padding: 6px 0;
+    margin-left: clamp(8px, 0.8vw, 14px);
+    transition: color 0.8s ease;
+    user-select: none;
+  }
+
+  .diagram-arrow.active { color: #C9A84C; }
+  .diagram-arrow.visited { color: #7A5A10; }
+
+  /* Return arrow */
+  .diagram-return {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2a2a2a;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(11px, 1.1vw, 14px);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    margin-left: clamp(8px, 0.8vw, 14px);
+    transition: color 0.8s ease, opacity 0.8s ease;
+    opacity: 0;
+  }
+
+  .diagram-return.visible { opacity: 0.5; }
+  .diagram-return.active { color: #C9A84C; opacity: 0.8; }
+
+  /* Loop counter under diagram */
+  .loop-label {
+    margin-top: 3vh;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(12px, 1.2vw, 16px);
+    color: #606060;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    display: flex;
+    gap: 12px;
+  }
+
+  .loop-label.visible { opacity: 1; }
+
+  .loop-label .loop-num {
+    transition: color 0.5s ease;
+  }
+
+  .loop-label .loop-num.active {
+    color: #C9A84C;
+  }
+
+  .loop-label .loop-num.past {
+    color: #7A5A10;
+  }
+
+  /* ---- Terminal (right side) ---- */
+  .terminal {
+    flex: 1;
+    max-height: 58vh;
+    background: #0A1A0A;
+    border: 1px solid #333;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .terminal-titlebar {
+    height: 32px;
+    background: #111;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 7px;
+    flex-shrink: 0;
+  }
+
+  .terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+
+  .terminal-dot.red { background: #ff5f57; }
+  .terminal-dot.yellow { background: #febc2e; }
+  .terminal-dot.green { background: #28c840; }
+
+  .terminal-title-text {
+    flex: 1;
+    text-align: center;
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .terminal-body {
+    flex: 1;
+    padding: 16px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+
+  .terminal-body::-webkit-scrollbar { display: none; }
+
+  .term-line {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: clamp(14px, 1.3vw, 18px);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    transition: opacity 0.8s ease;
+  }
+
+  .term-line.dimmed { opacity: 0.3; }
+
+  .term-line.prompt .prompt-caret { color: #C9A84C; font-weight: bold; }
+  .term-line.prompt .prompt-text { color: #F5F0E8; }
+
+  .term-line.think { color: #C9A84C; font-style: italic; }
+  .term-line.think .think-label { color: #7A5A10; font-style: normal; font-size: 0.85em; }
+
+  .term-line.act { color: #00CC44; }
+  .term-line.act .act-label { color: #007722; font-size: 0.85em; }
+
+  .term-line.result { color: #F5F0E8; opacity: 0.55; }
+  .term-line.result .result-label { color: #606060; font-size: 0.85em; }
+
+  .term-line.separator {
+    border-top: 1px solid #1a2a1a;
+    margin: 10px 0 6px 0;
+    height: 0;
+    line-height: 0;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: #C9A84C;
+    vertical-align: text-bottom;
+    animation: blink 0.8s step-end infinite;
+    margin-left: 2px;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Takeaway */
+  .takeaway {
+    position: absolute;
+    color: #F5F0E8;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(24px, 3.2vw, 46px);
+    font-style: italic;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 2s ease;
+    z-index: 5;
+    max-width: 80vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .takeaway.visible { opacity: 1; }
+
+  .takeaway .gold {
+    color: #C9A84C;
+    text-shadow: 0 0 50px rgba(201, 168, 76, 0.25);
   }
 </style>
 </head>
 <body>
 
-<div class="question" id="question">How does it <em>think</em>?</div>
-
-<div class="loop-container" id="loopContainer">
-  <!-- Circular track -->
-  <div class="loop-ring">
-    <svg viewBox="0 0 500 500">
-      <circle class="ring-path" cx="250" cy="250" r="160" />
-      <circle class="pulse-path" id="pulse" cx="250" cy="250" r="160" />
-    </svg>
-  </div>
-
-  <!-- Step nodes -->
-  <div class="step step-think" id="stepThink">
-    <div class="step-label">Think</div>
-    <div class="step-dot"></div>
-  </div>
-  <div class="step step-act" id="stepAct">
-    <div class="step-dot"></div>
-    <div class="step-label">Act</div>
-  </div>
-  <div class="step step-observe" id="stepObserve">
-    <div class="step-dot"></div>
-    <div class="step-label">Observe</div>
-  </div>
-  <div class="step step-repeat" id="stepRepeat">
-    <div class="step-label">Repeat</div>
-    <div class="step-dot"></div>
-  </div>
-
-  <!-- Annotations (stage 2) -->
-  <div class="annotation ann-think" id="annThink">Read the request, make a plan</div>
-  <div class="annotation ann-act" id="annAct">Call a tool — read, edit, run</div>
-  <div class="annotation ann-observe" id="annObserve">Check the result</div>
-  <div class="annotation ann-repeat" id="annRepeat">Until the task is done</div>
-</div>
-
-<div class="punchline" id="punchline">Not magic. Just a disciplined loop.</div>
-
 <div class="concept-number">3</div>
 
-<div class="nav-hint" id="navHint">→</div>
+<div class="title" id="title">The Agentic Loop</div>
+
+<div class="main-layout" id="mainLayout">
+  <!-- Left: diagram -->
+  <div class="diagram">
+    <div class="diagram-step" id="stepThink">
+      <div class="step-dot"><span class="dot-icon">💭</span></div>
+      <span class="step-label">Think</span>
+    </div>
+    <div class="diagram-arrow" id="arrowTA">↓</div>
+    <div class="diagram-step" id="stepAct">
+      <div class="step-dot"><span class="dot-icon">⚡</span></div>
+      <span class="step-label">Act</span>
+    </div>
+    <div class="diagram-arrow" id="arrowAO">↓</div>
+    <div class="diagram-step" id="stepObserve">
+      <div class="step-dot"><span class="dot-icon">👁</span></div>
+      <span class="step-label">Observe</span>
+    </div>
+    <div class="diagram-return" id="returnArrow">↻ repeat</div>
+
+    <div class="loop-label" id="loopLabel">
+      <span class="loop-num" id="ln1">1</span>
+      <span class="loop-num" id="ln2">2</span>
+      <span class="loop-num" id="ln3">3</span>
+    </div>
+  </div>
+
+  <!-- Right: terminal -->
+  <div class="terminal">
+    <div class="terminal-titlebar">
+      <div class="terminal-dot red"></div>
+      <div class="terminal-dot yellow"></div>
+      <div class="terminal-dot green"></div>
+      <div class="terminal-title-text">claude-code</div>
+    </div>
+    <div class="terminal-body" id="termBody"></div>
+  </div>
+</div>
+
+<div class="takeaway" id="takeaway">
+  Think in <span class="gold">loops</span>.<br>Give it the right <span class="gold">tools</span>.
+</div>
 
 <div class="slide-number">7 / 9</div>
 
 <script>
-  const question = document.getElementById('question');
-  const loopContainer = document.getElementById('loopContainer');
-  const pulse = document.getElementById('pulse');
-  const punchline = document.getElementById('punchline');
-
+  // Steps: each arrow-right press
   const steps = [
-    document.getElementById('stepThink'),
-    document.getElementById('stepAct'),
-    document.getElementById('stepObserve'),
-    document.getElementById('stepRepeat')
+    // Step 0: user prompt
+    { type: 'prompt', text: '> Create slide 7 for the meetup', phase: null, loop: 0 },
+
+    // Loop 1
+    { type: 'separator', phase: null, loop: 1 },
+    { type: 'think',  text: 'I need to read the content file to understand what slide 7 should show.', phase: 'think', loop: 1 },
+    { type: 'act',    text: 'tool: Read("content/07-agentic-loop.md")', phase: 'act', loop: 1 },
+    { type: 'result', text: 'The slide should explain the agentic loop using a real example.', phase: 'observe', loop: 1 },
+
+    // Loop 2
+    { type: 'separator', phase: null, loop: 2 },
+    { type: 'think',  text: 'I need to match the style of existing slides.', phase: 'think', loop: 2 },
+    { type: 'act',    text: 'tool: Read("slides/06-context-window.html")', phase: 'act', loop: 2 },
+    { type: 'result', text: 'Dark theme, gold accents, Georgia font, arrow key navigation.', phase: 'observe', loop: 2 },
+
+    // Loop 3
+    { type: 'separator', phase: null, loop: 3 },
+    { type: 'think',  text: 'Now I have everything. Time to write the slide.', phase: 'think', loop: 3 },
+    { type: 'act',    text: 'tool: Write("slides/07-agentic-loop.html")', phase: 'act', loop: 3 },
+    { type: 'result', text: 'Done. The file has been created.', phase: 'observe', loop: 3 },
+
+    // Takeaway
+    { type: 'takeaway' }
   ];
 
-  const annotations = [
-    document.getElementById('annThink'),
-    document.getElementById('annAct'),
-    document.getElementById('annObserve'),
-    document.getElementById('annRepeat')
-  ];
+  let currentStep = -1;
+  let typing = false;
+  let typeTimer = null;
+  let typeResolve = null;
 
-  let stage = 0;
-  const maxStage = 3;
-  let cycleInterval = null;
+  const title = document.getElementById('title');
+  const mainLayout = document.getElementById('mainLayout');
+  const termBody = document.getElementById('termBody');
+  const takeaway = document.getElementById('takeaway');
 
-  // Initial state
-  setTimeout(() => { question.classList.add('visible'); }, 300);
+  const stepThink = document.getElementById('stepThink');
+  const stepAct = document.getElementById('stepAct');
+  const stepObserve = document.getElementById('stepObserve');
+  const arrowTA = document.getElementById('arrowTA');
+  const arrowAO = document.getElementById('arrowAO');
+  const returnArrow = document.getElementById('returnArrow');
+  const loopLabel = document.getElementById('loopLabel');
+  const ln1 = document.getElementById('ln1');
+  const ln2 = document.getElementById('ln2');
+  const ln3 = document.getElementById('ln3');
+  const loopNums = [ln1, ln2, ln3];
 
-  function startCycle() {
-    let current = 0;
-    steps[0].classList.add('active');
+  const lineElements = [];
 
-    cycleInterval = setInterval(() => {
-      steps[current].classList.remove('active');
-      current = (current + 1) % 4;
-      steps[current].classList.add('active');
-    }, 1000);
-  }
+  // Init
+  setTimeout(() => { title.classList.add('visible'); }, 200);
 
-  function stopCycle() {
-    if (cycleInterval) {
-      clearInterval(cycleInterval);
-      cycleInterval = null;
+  function updateDiagram(phase, loop) {
+    // Reset
+    [stepThink, stepAct, stepObserve].forEach(s => {
+      s.classList.remove('active', 'visited');
+    });
+    [arrowTA, arrowAO].forEach(a => {
+      a.classList.remove('active', 'visited');
+    });
+    returnArrow.classList.remove('active');
+
+    if (!phase) return;
+
+    if (phase === 'think') {
+      stepThink.classList.add('active');
+      // If returning from observe, show return arrow active briefly
+      if (loop > 1) {
+        returnArrow.classList.add('active');
+      }
+    } else if (phase === 'act') {
+      stepThink.classList.add('visited');
+      arrowTA.classList.add('active');
+      stepAct.classList.add('active');
+    } else if (phase === 'observe') {
+      stepThink.classList.add('visited');
+      arrowTA.classList.add('visited');
+      stepAct.classList.add('visited');
+      arrowAO.classList.add('active');
+      stepObserve.classList.add('active');
     }
-    steps.forEach(s => s.classList.remove('active'));
+
+    // Update loop numbers
+    loopNums.forEach((el, i) => {
+      el.classList.remove('active', 'past');
+      if (i + 1 === loop) el.classList.add('active');
+      else if (i + 1 < loop) el.classList.add('past');
+    });
   }
 
-  function forward() {
-    if (stage >= maxStage) {
+  function buildPrefix(step) {
+    if (step.type === 'prompt') {
+      return { prefix: '<span class="prompt-caret">&gt; </span><span class="prompt-text">', suffix: '</span>', raw: step.text.substring(2) };
+    }
+    if (step.type === 'think') {
+      return { prefix: '<span class="think-label">thinking  </span>', suffix: '', raw: step.text };
+    }
+    if (step.type === 'act') {
+      return { prefix: '<span class="act-label">  </span>', suffix: '', raw: step.text };
+    }
+    if (step.type === 'result') {
+      return { prefix: '<span class="result-label">→ </span>', suffix: '', raw: step.text };
+    }
+    return { prefix: '', suffix: '', raw: '' };
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function createLineElement(step) {
+    const div = document.createElement('div');
+    div.classList.add('term-line');
+    if (step.type === 'separator') {
+      div.classList.add('separator');
+    } else {
+      div.classList.add(step.type);
+    }
+    return div;
+  }
+
+  function typeTextInElement(el, step) {
+    return new Promise((resolve) => {
+      typing = true;
+      typeResolve = resolve;
+
+      const info = buildPrefix(step);
+      el.innerHTML = info.prefix + '<span class="cursor"></span>' + info.suffix;
+
+      const cursorEl = el.querySelector('.cursor');
+      const chars = info.raw.split('');
+      let i = 0;
+
+      const baseDelay = step.type === 'prompt' ? 35 : step.type === 'think' ? 28 : step.type === 'act' ? 18 : 22;
+      const jitter = 12;
+
+      function next() {
+        if (i >= chars.length) {
+          cursorEl.remove();
+          typing = false;
+          typeTimer = null;
+          typeResolve = null;
+          resolve();
+          return;
+        }
+        cursorEl.parentNode.insertBefore(document.createTextNode(chars[i]), cursorEl);
+        i++;
+        const delay = baseDelay + (Math.random() * jitter * 2 - jitter);
+        typeTimer = setTimeout(next, Math.max(10, delay));
+      }
+
+      next();
+    });
+  }
+
+  function fastForward(el, step) {
+    if (typeTimer) { clearTimeout(typeTimer); typeTimer = null; }
+    const info = buildPrefix(step);
+    const label = info.prefix;
+    el.innerHTML = label + escapeHtml(info.raw) + info.suffix;
+    typing = false;
+    if (typeResolve) { const r = typeResolve; typeResolve = null; r(); }
+  }
+
+  function dimPreviousLines() {
+    let lastIdx = -1;
+    for (let i = lineElements.length - 1; i >= 0; i--) {
+      if (!lineElements[i].classList.contains('separator')) { lastIdx = i; break; }
+    }
+    lineElements.forEach((el, i) => {
+      if (el.classList.contains('separator')) return;
+      if (i === lastIdx) el.classList.remove('dimmed');
+      else el.classList.add('dimmed');
+    });
+  }
+
+  function scrollToBottom() {
+    termBody.scrollTop = termBody.scrollHeight;
+  }
+
+  async function forward() {
+    if (typing) {
+      const step = steps[currentStep];
+      const el = lineElements[lineElements.length - 1];
+      fastForward(el, step);
+      return;
+    }
+
+    const nextStep = currentStep + 1;
+
+    if (nextStep >= steps.length) {
       window.location.href = '08-end.html';
       return;
     }
-    stage++;
 
-    if (stage === 1) {
-      question.classList.add('fade-up');
-      setTimeout(() => {
-        loopContainer.classList.add('visible');
-        pulse.classList.add('animate');
-        startCycle();
-      }, 800);
+    currentStep = nextStep;
+    const step = steps[currentStep];
+
+    if (step.type === 'takeaway') {
+      mainLayout.classList.add('hidden');
+      title.classList.add('dimmed');
+      setTimeout(() => { takeaway.classList.add('visible'); }, 600);
+      return;
     }
 
-    if (stage === 2) {
-      annotations.forEach((ann, i) => {
-        setTimeout(() => { ann.classList.add('visible'); }, i * 300);
-      });
+    // Show layout
+    mainLayout.classList.add('visible');
+    mainLayout.classList.remove('hidden');
+    title.classList.remove('dimmed');
+    takeaway.classList.remove('visible');
+
+    // Show loop label and return arrow once we're in loops
+    if (step.loop >= 1) {
+      loopLabel.classList.add('visible');
+      returnArrow.classList.add('visible');
     }
 
-    if (stage === 3) {
-      punchline.classList.add('visible');
+    // Update diagram
+    if (step.phase) {
+      updateDiagram(step.phase, step.loop);
+    } else if (step.type === 'separator') {
+      // At separator, briefly clear diagram for the new loop
+      updateDiagram(null, step.loop);
+    } else if (step.type === 'prompt') {
+      updateDiagram(null, 0);
     }
+
+    // Add terminal line
+    const el = createLineElement(step);
+    lineElements.push(el);
+    termBody.appendChild(el);
+
+    if (step.type === 'separator') {
+      scrollToBottom();
+      return;
+    }
+
+    dimPreviousLines();
+    scrollToBottom();
+    await typeTextInElement(el, step);
+    scrollToBottom();
   }
 
   function backward() {
-    if (stage <= 0) {
+    if (typing) {
+      if (typeTimer) clearTimeout(typeTimer);
+      typeTimer = null;
+      typing = false;
+      if (typeResolve) { const r = typeResolve; typeResolve = null; r(); }
+    }
+
+    if (currentStep < 0) {
       window.location.href = '06-context-window.html';
       return;
     }
 
-    if (stage === 3) {
-      punchline.classList.remove('visible');
-      stage = 2;
+    const step = steps[currentStep];
+
+    if (step.type === 'takeaway') {
+      takeaway.classList.remove('visible');
+      mainLayout.classList.remove('hidden');
+      mainLayout.classList.add('visible');
+      title.classList.remove('dimmed');
+      currentStep--;
+      // Restore diagram to last state
+      const s = steps[currentStep];
+      if (s && s.phase) updateDiagram(s.phase, s.loop);
+      dimPreviousLines();
       return;
     }
 
-    if (stage === 2) {
-      annotations.forEach(ann => ann.classList.remove('visible'));
-      stage = 1;
-      return;
+    // Remove last line
+    if (lineElements.length > 0) {
+      const removed = lineElements.pop();
+      termBody.removeChild(removed);
     }
 
-    if (stage === 1) {
-      stopCycle();
-      pulse.classList.remove('animate');
-      loopContainer.classList.remove('visible');
-      question.classList.remove('fade-up');
-      question.classList.add('visible');
-      stage = 0;
+    currentStep--;
+
+    if (currentStep >= 0) {
+      const s = steps[currentStep];
+      if (s.phase) {
+        updateDiagram(s.phase, s.loop);
+      } else if (s.type === 'separator') {
+        updateDiagram(null, s.loop);
+      } else {
+        updateDiagram(null, 0);
+      }
+    } else {
+      updateDiagram(null, 0);
+      loopLabel.classList.remove('visible');
+      returnArrow.classList.remove('visible');
     }
+
+    dimPreviousLines();
+    scrollToBottom();
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') forward();
-    if (e.key === 'ArrowLeft') backward();
+    if (e.key === 'ArrowRight') { e.preventDefault(); forward(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); backward(); }
   });
 </script>
 
