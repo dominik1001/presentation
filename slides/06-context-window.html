@@ -19,190 +19,6 @@
     position: relative;
   }
 
-  /* Stage 0: The question */
-  .question {
-    position: absolute;
-    color: #F5F0E8;
-    font-size: clamp(36px, 5vw, 64px);
-    font-style: italic;
-    font-weight: normal;
-    letter-spacing: 0.02em;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 1.5s ease, transform 1.5s ease;
-    z-index: 3;
-  }
-
-  .question.visible { opacity: 1; }
-  .question.fade-up { opacity: 0; transform: translateY(-40px); }
-  .question em { font-style: normal; color: #C9A84C; }
-
-  /* Stage 1: The context window visualization */
-  .window-container {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: clamp(24px, 4vw, 60px);
-    opacity: 0;
-    transition: opacity 2s ease;
-    z-index: 2;
-  }
-
-  .window-container.visible { opacity: 1; }
-
-  .context-window {
-    position: relative;
-    width: clamp(400px, 50vw, 640px);
-    height: 60vh;
-    border: 1px solid #7A5A10;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #0A0A0A;
-  }
-
-  /* Capacity label */
-  .capacity-label {
-    position: absolute;
-    top: -3.5vh;
-    left: 0;
-    color: #606060;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(12px, 1.4vw, 16px);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .capacity-label .gold { color: #C9A84C; }
-
-  /* Lines representing tokens/content in the window */
-  .token-lines {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 12px 16px;
-  }
-
-  .token-line {
-    height: 6px;
-    border-radius: 3px;
-    background: #F5F0E8;
-    opacity: 0;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: opacity 0.4s ease, transform 0.5s ease, background 1.2s ease;
-  }
-
-  .token-line.visible {
-    opacity: 0.35;
-    transform: scaleX(1);
-  }
-
-  /* Lost in the middle: dim the middle lines */
-  .token-line.lost {
-    opacity: 0.06;
-    background: #606060;
-  }
-
-  /* Keep first and last lines bright */
-  .token-line.edge {
-    opacity: 0.7;
-    background: #C9A84C;
-  }
-
-  /* "Lost in the middle" label */
-  .lost-label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #C9A84C;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(14px, 1.8vw, 22px);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    opacity: 0;
-    transition: opacity 1.5s ease;
-    text-shadow: 0 0 40px rgba(201, 168, 76, 0.4);
-    white-space: nowrap;
-    z-index: 2;
-  }
-
-  .lost-label.visible { opacity: 1; }
-
-  /* Bracket decoration around the lost zone */
-  .bracket {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 1px;
-    background: #7A5A10;
-    opacity: 0;
-    transition: opacity 1.5s ease;
-  }
-
-  .bracket.visible { opacity: 0.5; }
-  .bracket.top { top: 28%; }
-  .bracket.bottom { bottom: 28%; }
-
-  /* Side annotation */
-  .side-note {
-    color: #606060;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(13px, 1.5vw, 18px);
-    line-height: 1.9;
-    max-width: 200px;
-    opacity: 0;
-    transition: opacity 1.5s ease;
-  }
-
-  .side-note.visible { opacity: 1; }
-  .side-note .highlight { color: #C9A84C; }
-
-  /* Stage 3: The punchline */
-  .punchline {
-    position: absolute;
-    bottom: 10vh;
-    color: #C9A84C;
-    font-size: clamp(22px, 3vw, 42px);
-    font-style: italic;
-    letter-spacing: 0.03em;
-    opacity: 0;
-    transition: opacity 2s ease;
-    text-shadow: 0 0 50px rgba(201, 168, 76, 0.25);
-    z-index: 3;
-  }
-
-  .punchline.visible { opacity: 1; }
-
-  /* Navigation hint */
-  .nav-hint {
-    position: absolute;
-    bottom: 3vh;
-    right: 4vw;
-    color: #606060;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: 14px;
-    letter-spacing: 0.08em;
-    opacity: 0;
-    animation: fadeIn 2s ease-out 1.5s forwards;
-  }
-
-  .slide-number {
-    position: fixed;
-    bottom: 2vh;
-    right: 2.5vw;
-    color: #2a2a2a;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    user-select: none;
-    z-index: 4;
-  }
-
-  /* Concept number */
   .concept-number {
     position: fixed;
     top: 4vh;
@@ -217,151 +33,492 @@
     z-index: 1;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 0.6; }
+  .slide-number {
+    position: fixed;
+    bottom: 2vh;
+    right: 2.5vw;
+    color: #2a2a2a;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    user-select: none;
+    z-index: 4;
   }
+
+  /* Title */
+  .title {
+    position: absolute;
+    top: 8vh;
+    color: #F5F0E8;
+    font-size: clamp(32px, 4.5vw, 56px);
+    font-weight: normal;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    z-index: 3;
+    text-align: center;
+  }
+
+  .title.visible { opacity: 1; }
+  .title.dimmed { opacity: 0.15; transition: opacity 1.5s ease; }
+
+  /* Context meter */
+  .meter-container {
+    position: fixed;
+    right: 6vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 50vh;
+    border: 1px solid #333;
+    border-radius: 14px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    z-index: 3;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .meter-container.visible { opacity: 1; }
+
+  .meter-fill {
+    width: 100%;
+    background: linear-gradient(to top, #C9A84C, #C9A84C);
+    border-radius: 0 0 13px 13px;
+    transition: height 1.2s ease, background 1.2s ease;
+    height: 0%;
+  }
+
+  .meter-label {
+    position: fixed;
+    right: 5.2vw;
+    top: calc(50% + 28vh);
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    z-index: 3;
+    transform: translateX(4px);
+  }
+
+  .meter-label.visible { opacity: 0.6; }
+
+  /* QA pairs area */
+  .qa-area {
+    position: absolute;
+    left: 10vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(65vw, 700px);
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  .qa-area.visible { opacity: 1; }
+  .qa-area.faded { opacity: 0; transition: opacity 1.5s ease; }
+
+  .qa-pair {
+    margin-bottom: 3.5vh;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .qa-pair.visible { opacity: 1; }
+  .qa-pair.dimmed { opacity: 0.25; transition: opacity 1s ease; }
+
+  .question-text {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(13px, 1.5vw, 17px);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.8vh;
+    text-transform: uppercase;
+  }
+
+  .answer-text {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: clamp(16px, 2vw, 24px);
+    line-height: 1.6;
+    min-height: 1.6em;
+  }
+
+  /* Cursor blink */
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: #C9A84C;
+    vertical-align: text-bottom;
+    animation: blink 0.8s step-end infinite;
+    margin-left: 2px;
+  }
+
+  .cursor.dead {
+    animation: none;
+    opacity: 0;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Takeaway */
+  .takeaway {
+    position: absolute;
+    color: #F5F0E8;
+    font-size: clamp(24px, 3.2vw, 46px);
+    font-style: italic;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 2s ease;
+    z-index: 5;
+    max-width: 80vw;
+  }
+
+  .takeaway.visible { opacity: 1; }
+
+  .takeaway .gold {
+    color: #C9A84C;
+    text-shadow: 0 0 50px rgba(201, 168, 76, 0.25);
+  }
+
+  /* Meter percentage label */
+  .meter-percent {
+    position: fixed;
+    right: 4.2vw;
+    top: 50%;
+    transform: translateY(-50%) translateX(100%);
+    color: #606060;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    opacity: 0;
+    transition: opacity 1s ease, color 1s ease;
+    z-index: 3;
+    margin-right: -38px;
+  }
+
+  .meter-percent.visible { opacity: 0.6; }
+  .meter-percent.danger { color: #aa3333; opacity: 0.8; }
 </style>
 </head>
 <body>
 
-<div class="question" id="question">What can it <em>see</em>?</div>
+<div class="concept-number">2</div>
 
-<div class="window-container" id="windowContainer">
-  <div style="position: relative;">
-    <div class="capacity-label">context window — <span class="gold">1 million tokens</span></div>
-    <div class="context-window" id="contextWindow">
-      <div class="token-lines" id="tokenLines"></div>
-      <div class="bracket top" id="bracketTop"></div>
-      <div class="bracket bottom" id="bracketBottom"></div>
-      <div class="lost-label" id="lostLabel">lost in the middle</div>
-    </div>
+<div class="title" id="title">The Context Window</div>
+
+<div class="meter-container" id="meter">
+  <div class="meter-fill" id="meterFill"></div>
+</div>
+<div class="meter-label" id="meterLabel">context</div>
+<div class="meter-percent" id="meterPercent"></div>
+
+<div class="qa-area" id="qaArea">
+  <div class="qa-pair" id="qa0">
+    <div class="question-text">What is the capital of France?</div>
+    <div class="answer-text" id="answer0"></div>
   </div>
-  <div class="side-note" id="sideNote">
-    <span class="highlight">Beginning</span> and <span class="highlight">end</span><br>
-    stay sharp.<br><br>
-    The middle<br>
-    fades.
+  <div class="qa-pair" id="qa1">
+    <div class="question-text">What is the largest ocean?</div>
+    <div class="answer-text" id="answer1"></div>
+  </div>
+  <div class="qa-pair" id="qa2">
+    <div class="question-text">What is the speed of light?</div>
+    <div class="answer-text" id="answer2"></div>
+  </div>
+  <div class="qa-pair" id="qa3">
+    <div class="question-text">What does the Earth revolve around?</div>
+    <div class="answer-text" id="answer3"></div>
   </div>
 </div>
 
-<div class="punchline" id="punchline">Structure is memory.</div>
-
-<div class="concept-number">2</div>
-
-<div class="nav-hint" id="navHint">→</div>
+<div class="takeaway" id="takeaway">
+  When your context gets full,<br>the model gets <span class="gold">stupid</span>.
+</div>
 
 <div class="slide-number">6 / 9</div>
 
 <script>
-  const LINE_COUNT = 32;
-  const EDGE_COUNT = 6; // lines at top and bottom that stay bright
+  let stage = 0;
+  const maxStage = 6;
+  let typing = false;
+  let typeTimeout = null;
 
-  // Generate token lines with varied widths
-  const tokenLines = document.getElementById('tokenLines');
-  for (let i = 0; i < LINE_COUNT; i++) {
-    const line = document.createElement('div');
-    line.className = 'token-line';
-    // Varied widths for visual interest
-    const width = 40 + Math.sin(i * 1.7 + 3) * 25 + Math.random() * 20;
-    line.style.width = Math.min(width, 92) + '%';
-    line.dataset.index = i;
-    tokenLines.appendChild(line);
+  const title = document.getElementById('title');
+  const meter = document.getElementById('meter');
+  const meterFill = document.getElementById('meterFill');
+  const meterLabel = document.getElementById('meterLabel');
+  const meterPercent = document.getElementById('meterPercent');
+  const qaArea = document.getElementById('qaArea');
+  const takeaway = document.getElementById('takeaway');
+
+  const qaPairs = [
+    document.getElementById('qa0'),
+    document.getElementById('qa1'),
+    document.getElementById('qa2'),
+    document.getElementById('qa3')
+  ];
+  const answers = [
+    document.getElementById('answer0'),
+    document.getElementById('answer1'),
+    document.getElementById('answer2'),
+    document.getElementById('answer3')
+  ];
+
+  // Answer configs: text, color, typing characteristics
+  const answerConfigs = [
+    {
+      text: "The capital of France is Paris.",
+      color: "#C9A84C",
+      baseDelay: 45,
+      jitter: 10,
+      pauses: {},
+      meterPct: 20,
+      meterColor: "#C9A84C"
+    },
+    {
+      text: "The largest ocean is... the Pacific Ocean.",
+      color: "#b8a060",
+      baseDelay: 50,
+      jitter: 20,
+      pauses: {20: 400, 21: 100}, // pause after "is..."
+      meterPct: 45,
+      meterColor: "#C9A84C"
+    },
+    {
+      text: "The speed of light is approximately 300,000 km/s... as I mentioned regarding the oceans earlier...",
+      color: "#887755",
+      baseDelay: 60,
+      jitter: 50,
+      pauses: {42: 600, 43: 200, 57: 500},
+      meterPct: 70,
+      meterColor: "#aa7722"
+    },
+    {
+      text: "The Earth revolves around the sun. The sun is a star. I believe you asked about France.",
+      color: "#666666",
+      baseDelay: 70,
+      jitter: 80,
+      pauses: {31: 500, 50: 700, 58: 400, 70: 600},
+      meterPct: 95,
+      meterColor: "#aa3333"
+    }
+  ];
+
+  // Initialize: show title
+  setTimeout(() => {
+    title.classList.add('visible');
+  }, 200);
+  setTimeout(() => {
+    meter.classList.add('visible');
+    meterLabel.classList.add('visible');
+  }, 800);
+
+  function typeText(el, config, callback) {
+    typing = true;
+    const chars = config.text.split('');
+    let i = 0;
+    el.style.color = config.color;
+    el.innerHTML = '<span class="cursor"></span>';
+
+    function typeNext() {
+      if (i >= chars.length) {
+        // Remove cursor or make it dead
+        const cursor = el.querySelector('.cursor');
+        if (cursor) cursor.classList.add('dead');
+        typing = false;
+        if (callback) callback();
+        return;
+      }
+
+      const span = el.querySelector('.cursor');
+      const textNode = document.createTextNode(chars[i]);
+      el.insertBefore(textNode, span);
+      i++;
+
+      let delay = config.baseDelay + (Math.random() * config.jitter * 2 - config.jitter);
+      if (config.pauses[i]) delay += config.pauses[i];
+      delay = Math.max(20, delay);
+
+      typeTimeout = setTimeout(typeNext, delay);
+    }
+
+    typeNext();
   }
 
-  const lines = document.querySelectorAll('.token-line');
-  const question = document.getElementById('question');
-  const windowContainer = document.getElementById('windowContainer');
-  const lostLabel = document.getElementById('lostLabel');
-  const bracketTop = document.getElementById('bracketTop');
-  const bracketBottom = document.getElementById('bracketBottom');
-  const sideNote = document.getElementById('sideNote');
-  const punchline = document.getElementById('punchline');
+  function clearTyping() {
+    if (typeTimeout) {
+      clearTimeout(typeTimeout);
+      typeTimeout = null;
+    }
+    typing = false;
+  }
 
-  let stage = 0;
-  const maxStage = 3;
+  function setMeter(pct, color) {
+    meterFill.style.height = pct + '%';
+    if (color) meterFill.style.background = `linear-gradient(to top, ${color}, ${color})`;
+    meterPercent.textContent = pct + '%';
+    meterPercent.classList.add('visible');
+    if (pct >= 90) {
+      meterPercent.classList.add('danger');
+    } else {
+      meterPercent.classList.remove('danger');
+    }
+  }
 
-  // Initial state: show question
-  setTimeout(() => { question.classList.add('visible'); }, 300);
+  function showStage(s) {
+    // Show QA area
+    qaArea.classList.add('visible');
+    qaArea.classList.remove('faded');
+    title.classList.remove('dimmed');
+    title.classList.add('visible');
+    takeaway.classList.remove('visible');
+
+    // Reset all QA pairs
+    qaPairs.forEach((qa, idx) => {
+      if (idx < s) {
+        qa.classList.add('visible');
+        qa.classList.remove('dimmed');
+        // Dim previous answers
+        if (idx < s - 1) {
+          qa.classList.add('dimmed');
+        }
+      } else {
+        qa.classList.remove('visible');
+        qa.classList.remove('dimmed');
+      }
+    });
+  }
 
   function forward() {
+    if (typing) {
+      // Fast-forward current typing
+      clearTyping();
+      const idx = stage - 1;
+      if (idx >= 0 && idx < 4) {
+        const cursor = answers[idx].querySelector('.cursor');
+        answers[idx].textContent = answerConfigs[idx].text;
+        answers[idx].style.color = answerConfigs[idx].color;
+      }
+      return;
+    }
+
     if (stage >= maxStage) {
       window.location.href = '07-agentic-loop.html';
       return;
     }
     stage++;
 
-    if (stage === 1) {
-      // Fade question, reveal context window with lines filling in
-      question.classList.add('fade-up');
+    if (stage >= 1 && stage <= 4) {
+      const idx = stage - 1;
+      showStage(stage);
+
+      // Show current QA pair
+      qaPairs[idx].classList.add('visible');
+      qaPairs[idx].classList.remove('dimmed');
+
+      // Set meter
+      const config = answerConfigs[idx];
+      setMeter(config.meterPct, config.meterColor);
+
+      // Type answer
+      typeText(answers[idx], config);
+    }
+
+    if (stage === 5) {
+      // Takeaway
+      qaArea.classList.add('faded');
+      title.classList.add('dimmed');
+      meterPercent.classList.remove('visible');
       setTimeout(() => {
-        windowContainer.classList.add('visible');
-        lines.forEach((line, i) => {
-          setTimeout(() => { line.classList.add('visible'); }, i * 50);
-        });
+        takeaway.classList.add('visible');
       }, 800);
     }
 
-    if (stage === 2) {
-      // "Lost in the middle" — dim middle lines, brighten edges
-      lines.forEach((line, i) => {
-        if (i < EDGE_COUNT || i >= LINE_COUNT - EDGE_COUNT) {
-          line.classList.add('edge');
-        } else {
-          line.classList.add('lost');
-        }
-      });
-      setTimeout(() => {
-        lostLabel.classList.add('visible');
-        bracketTop.classList.add('visible');
-        bracketBottom.classList.add('visible');
-      }, 600);
-      setTimeout(() => {
-        sideNote.classList.add('visible');
-      }, 1200);
-    }
-
-    if (stage === 3) {
-      punchline.classList.add('visible');
+    if (stage === 6) {
+      // Next press navigates
     }
   }
 
   function backward() {
+    if (typing) {
+      clearTyping();
+    }
+
     if (stage <= 0) {
       window.location.href = '05-system-prompt.html';
       return;
     }
 
-    if (stage === 3) {
-      punchline.classList.remove('visible');
-      stage = 2;
+    if (stage === 6) {
+      stage = 5;
       return;
     }
 
-    if (stage === 2) {
-      lines.forEach(line => {
-        line.classList.remove('edge', 'lost');
+    if (stage === 5) {
+      takeaway.classList.remove('visible');
+      qaArea.classList.remove('faded');
+      title.classList.remove('dimmed');
+
+      // Restore stage 4 state
+      stage = 4;
+      showStage(5); // show all 4 pairs, dim first 3
+      // Restore all answers
+      for (let i = 0; i < 4; i++) {
+        answers[i].textContent = answerConfigs[i].text;
+        answers[i].style.color = answerConfigs[i].color;
+        qaPairs[i].classList.add('visible');
+        if (i < 3) qaPairs[i].classList.add('dimmed');
+      }
+      setMeter(95, '#aa3333');
+      return;
+    }
+
+    // Going back from stage 1-4
+    stage--;
+
+    if (stage === 0) {
+      // Hide all QA, reset meter
+      qaPairs.forEach(qa => {
+        qa.classList.remove('visible');
+        qa.classList.remove('dimmed');
       });
-      lostLabel.classList.remove('visible');
-      bracketTop.classList.remove('visible');
-      bracketBottom.classList.remove('visible');
-      sideNote.classList.remove('visible');
-      stage = 1;
+      answers.forEach(a => { a.innerHTML = ''; });
+      meterFill.style.height = '0%';
+      meterPercent.classList.remove('visible');
+      qaArea.classList.add('visible');
       return;
     }
 
-    if (stage === 1) {
-      windowContainer.classList.remove('visible');
-      lines.forEach(l => l.classList.remove('visible'));
-      question.classList.remove('fade-up');
-      question.classList.add('visible');
-      stage = 0;
+    // Restore to current stage state
+    // Remove the QA pair we just left
+    const removedIdx = stage; // the one we're removing
+    qaPairs[removedIdx].classList.remove('visible');
+    qaPairs[removedIdx].classList.remove('dimmed');
+    answers[removedIdx].innerHTML = '';
+
+    // Un-dim the current top answer
+    if (stage > 0) {
+      qaPairs[stage - 1].classList.remove('dimmed');
     }
+
+    // Restore meter to current stage
+    const config = answerConfigs[stage - 1];
+    setMeter(config.meterPct, config.meterColor);
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') forward();
-    if (e.key === 'ArrowLeft') backward();
+    if (e.key === 'ArrowRight') { e.preventDefault(); forward(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); backward(); }
   });
 </script>
 
