@@ -1,6 +1,6 @@
 ---
 name: create-html-slide
-description: Create or update a single-file, fullscreen HTML slide for a live presentation.
+description: Create, update, or delete a single-file, fullscreen HTML slide for a live presentation.
 ---
 
 **Default style:** Always apply the `prestige-style` skill (colors, typography, layout rules) unless the user explicitly overrides it.
@@ -21,10 +21,10 @@ description: Create or update a single-file, fullscreen HTML slide for a live pr
 - One primary interaction per slide — clicking, typing, or watching
 - Always tell the user what to do (subtle prompt or label)
 
-## Interactions
+## Interaction & Navigation
 - Arrow keys are the only mechanism — no clicks, no other keys.
 - **Slides without interaction:** → goes to next slide, ← goes to previous slide.
-- **Slides with interaction:** arrows step through the interaction first (→ forward, ← backward). Navigation to the next/previous slide only triggers once the interaction reaches its end or beginning.
+- **Slides with interaction:** arrows step through the interaction first (→ forward, ← backward). Navigation to the next/previous slide only triggers once the interaction reaches its end or beginning. When moving backward from one slide to the previous, the user sees the last interation state of the previous slide.
 
 ## Inputs to ask for before building
 1. **Concept** — what is the one idea this slide teaches?
