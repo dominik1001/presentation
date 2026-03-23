@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Things to Remember</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080808;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    position: relative;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(4vh, 5vh, 6vh);
+    max-width: 80vw;
+  }
+
+  /* Each learning row */
+  .learning {
+    display: flex;
+    align-items: center;
+    gap: clamp(24px, 3vw, 48px);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .learning.visible {
+    animation: fadeIn 1.8s ease-out forwards;
+  }
+
+  .learning-number {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(48px, 7vw, 96px);
+    color: #C9A84C;
+    opacity: 0.35;
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: clamp(48px, 6vw, 80px);
+    text-align: center;
+    user-select: none;
+  }
+
+  .learning-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vh;
+  }
+
+  .learning-title {
+    color: #F5F0E8;
+    font-size: clamp(24px, 3vw, 42px);
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+
+  .learning-desc {
+    color: #606060;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: clamp(14px, 1.5vw, 20px);
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+
+  /* Dividers */
+  .divider {
+    width: clamp(200px, 40vw, 500px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #7A5A10 50%, transparent);
+    opacity: 0;
+    transform: scaleX(0.3);
+  }
+
+  .divider.visible {
+    animation: dividerIn 1.6s ease-out forwards;
+  }
+
+  /* Bottom quote */
+  .closing-quote {
+    margin-top: clamp(2vh, 3vh, 4vh);
+    color: #F5F0E8;
+    font-size: clamp(18px, 2.2vw, 32px);
+    font-style: italic;
+    letter-spacing: 0.02em;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .closing-quote.visible {
+    animation: fadeIn 2.5s ease-out forwards;
+  }
+
+  .closing-quote .gold {
+    color: #C9A84C;
+    text-shadow: 0 0 40px rgba(201, 168, 76, 0.2);
+  }
+
+  .slide-number {
+    position: fixed;
+    bottom: 2vh;
+    right: 2.5vw;
+    color: #2a2a2a;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes dividerIn {
+    from { opacity: 0; transform: scaleX(0.3); }
+    to   { opacity: 0.5; transform: scaleX(1); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="learning" id="l1">
+    <div class="learning-number">1</div>
+    <div class="learning-text">
+      <div class="learning-title">The System Prompt</div>
+      <div class="learning-desc">Hidden instructions that shape behavior. You can read and influence them.</div>
+    </div>
+  </div>
+
+  <div class="divider" id="d1"></div>
+
+  <div class="learning" id="l2">
+    <div class="learning-number">2</div>
+    <div class="learning-text">
+      <div class="learning-title">The Context Window</div>
+      <div class="learning-desc">When your context gets full, the model gets stupid. Start fresh.</div>
+    </div>
+  </div>
+
+  <div class="divider" id="d2"></div>
+
+  <div class="learning" id="l3">
+    <div class="learning-number">3</div>
+    <div class="learning-text">
+      <div class="learning-title">The Agentic Loop</div>
+      <div class="learning-desc">Think in loops. Give it the right tools.</div>
+    </div>
+  </div>
+
+  <div class="closing-quote" id="quote">
+    Any technology you understand is <span class="gold">no longer magic.</span>
+  </div>
+</div>
+
+<div class="slide-number">8 / 10</div>
+
+<script>
+  const items = [
+    { el: document.getElementById('l1'), delay: 300 },
+    { el: document.getElementById('d1'), delay: 900 },
+    { el: document.getElementById('l2'), delay: 1200 },
+    { el: document.getElementById('d2'), delay: 1800 },
+    { el: document.getElementById('l3'), delay: 2100 },
+    { el: document.getElementById('quote'), delay: 3200 },
+  ];
+
+  items.forEach(({ el, delay }) => {
+    setTimeout(() => { el.classList.add('visible'); }, delay);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') window.location.href = '07-agentic-loop.html';
+    if (e.key === 'ArrowRight') window.location.href = '09-end.html';
+  });
+</script>
+
+</body>
+</html>
