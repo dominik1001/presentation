@@ -2,7 +2,7 @@
 
 **A 10-minute talk demystifying Claude Code for everyday users.**
 
-Presented by Dominik Grusemann (Co-Founder, [Marbles AI](https://marbles.ai)) at the [Claude Code for Everyone](https://luma.com/5abx5e5u?tk=yEGUVl) Munich Meetup.
+Presented by Dominik Grusemann (Co-Founder, [Marbles AI](https://usemarbles.ai)) at the [Claude Code for Everyone](https://luma.com/5abx5e5u?tk=yEGUVl) Munich Meetup.
 
 ## Core Message
 
