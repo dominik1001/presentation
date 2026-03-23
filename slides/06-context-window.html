@@ -314,14 +314,32 @@
     }
   ];
 
-  // Initialize: show title
-  setTimeout(() => {
-    title.classList.add('visible');
-  }, 200);
-  setTimeout(() => {
+  // Check if arriving from next slide (back navigation)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('state') === 'last') {
+    stage = maxStage;
+    title.classList.add('visible', 'dimmed');
     meter.classList.add('visible');
     meterLabel.classList.add('visible');
-  }, 800);
+    qaArea.classList.add('visible', 'faded');
+    for (let i = 0; i < 4; i++) {
+      qaPairs[i].classList.add('visible');
+      if (i < 3) qaPairs[i].classList.add('dimmed');
+      answers[i].textContent = answerConfigs[i].text;
+      answers[i].style.color = answerConfigs[i].color;
+    }
+    setMeter(95, '#aa3333');
+    takeaway.classList.add('visible');
+  } else {
+    // Initialize: show title
+    setTimeout(() => {
+      title.classList.add('visible');
+    }, 200);
+    setTimeout(() => {
+      meter.classList.add('visible');
+      meterLabel.classList.add('visible');
+    }, 800);
+  }
 
   function typeText(el, config, callback) {
     typing = true;
@@ -455,7 +473,7 @@
     }
 
     if (stage <= 0) {
-      window.location.href = '05-system-prompt.html';
+      window.location.href = '05-system-prompt.html?state=last';
       return;
     }
 

@@ -55,6 +55,8 @@
     align-items: center;
     gap: 20px;
     opacity: 0;
+    text-decoration: none;
+    cursor: pointer;
   }
 
   .qr-card:nth-child(1) { animation: fadeIn 1.5s ease-out 1s forwards; }
@@ -151,7 +153,7 @@
   <div class="title">Thank you. <em>Questions?</em></div>
 
   <div class="qr-row">
-    <div class="qr-card">
+    <a href="https://www.linkedin.com/in/dominikgrusemann/" target="_blank" rel="noopener" class="qr-card">
       <div class="qr-frame">
         <svg viewBox="-1 -1 31 31" shape-rendering="crispEdges">
           <rect x="-1" y="-1" width="31" height="31" fill="#F5F0E8"/>
@@ -159,8 +161,8 @@
         </svg>
       </div>
       <div class="qr-label">LinkedIn</div>
-    </div>
-    <div class="qr-card">
+    </a>
+    <a href="https://github.com/dominik1001/claude-code-meetup" target="_blank" rel="noopener" class="qr-card">
       <div class="qr-frame">
         <svg viewBox="-1 -1 31 31" shape-rendering="crispEdges">
           <rect x="-1" y="-1" width="31" height="31" fill="#F5F0E8"/>
@@ -168,7 +170,7 @@
         </svg>
       </div>
       <div class="qr-label">This Talk</div>
-    </div>
+    </a>
   </div>
 
   <div class="speaker"><span class="name">Dominik Grusemann</span> · Marbles AI</div>
@@ -181,7 +183,7 @@
 <script>
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') {
-    window.location.href = '08-summary.html';
+    window.location.href = '08-summary.html?state=last';
   }
   if (e.key === 'ArrowRight') {
     window.location.href = '10-sources.html';

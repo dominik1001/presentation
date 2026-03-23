@@ -299,9 +299,20 @@
   const takeaway = document.getElementById('takeaway');
   const promptLines = document.querySelectorAll('.prompt-line');
 
-  // Initial state: show question + seal
-  setTimeout(() => { question.classList.add('visible'); }, 300);
-  setTimeout(() => { seal.classList.add('visible'); }, 800);
+  // Check if arriving from next slide (back navigation)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('state') === 'last') {
+    stage = maxStage;
+    question.classList.add('visible', 'fade-up');
+    seal.classList.add('broken');
+    promptContainer.classList.add('visible');
+    promptLines.forEach(l => l.classList.add('visible'));
+    takeaway.classList.add('visible');
+  } else {
+    // Initial state: show question + seal
+    setTimeout(() => { question.classList.add('visible'); }, 300);
+    setTimeout(() => { seal.classList.add('visible'); }, 800);
+  }
 
   function forward() {
     if (stage >= maxStage) {

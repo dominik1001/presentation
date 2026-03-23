@@ -184,11 +184,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="closing-quote" id="quote">
-                Any technology you understand is
-                <span class="gold">no longer magic.</span>
-            </div>
         </div>
 
         <div class="slide-number">8 / 10</div>
@@ -204,6 +199,17 @@
             ];
 
             let currentStep = -1;
+
+            // Check if arriving from next slide (back navigation)
+            const params = new URLSearchParams(window.location.search);
+            if (params.get("state") === "last") {
+                for (let i = 0; i < reveals.length; i++) {
+                    reveals[i].forEach((id) => {
+                        document.getElementById(id).classList.add("visible");
+                    });
+                }
+                currentStep = reveals.length - 1;
+            }
 
             function showStep(step) {
                 reveals[step].forEach((id) => {
@@ -229,7 +235,7 @@
 
             function backward() {
                 if (currentStep < 0) {
-                    window.location.href = "07-agentic-loop.html";
+                    window.location.href = "07-agentic-loop.html?state=last";
                     return;
                 }
                 hideStep(currentStep);

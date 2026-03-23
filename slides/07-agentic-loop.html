@@ -439,8 +439,35 @@
 
   const lineElements = [];
 
-  // Init
-  setTimeout(() => { title.classList.add('visible'); }, 200);
+  // Check if arriving from next slide (back navigation)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('state') === 'last') {
+    // Show all steps up to and including takeaway
+    title.classList.add('visible', 'dimmed');
+    mainLayout.classList.add('visible', 'hidden');
+    loopLabel.classList.add('visible');
+    returnArrow.classList.add('visible');
+
+    // Build all terminal lines (except takeaway)
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      if (step.type === 'takeaway') continue;
+      const el = createLineElement(step);
+      if (step.type !== 'separator') {
+        const info = buildPrefix(step);
+        el.innerHTML = info.prefix + escapeHtml(info.raw) + info.suffix;
+      }
+      lineElements.push(el);
+      termBody.appendChild(el);
+    }
+    dimPreviousLines();
+
+    currentStep = steps.length - 1; // takeaway step
+    takeaway.classList.add('visible');
+  } else {
+    // Init
+    setTimeout(() => { title.classList.add('visible'); }, 200);
+  }
 
   function updateDiagram(phase, loop) {
     // Reset
@@ -642,7 +669,7 @@
     }
 
     if (currentStep < 0) {
-      window.location.href = '06-context-window.html';
+      window.location.href = '06-context-window.html?state=last';
       return;
     }
 
