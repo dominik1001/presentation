@@ -87,130 +87,20 @@
     flex-direction: column;
     align-items: center;
     gap: 0;
+    position: relative;
   }
 
-  .diagram-step {
-    display: flex;
-    align-items: center;
-    gap: clamp(10px, 1.2vw, 18px);
-    opacity: 0.25;
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    transform: translateX(-8px);
+  .svg-diagram-container {
+    width: 100%;
+    position: relative;
   }
 
-  .diagram-step.active {
-    opacity: 1;
-    transform: translateX(0);
+  .svg-diagram-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
-  .diagram-step.visited {
-    opacity: 0.45;
-    transform: translateX(0);
-  }
-
-  .step-dot {
-    width: clamp(38px, 3.5vw, 52px);
-    height: clamp(38px, 3.5vw, 52px);
-    border-radius: 50%;
-    border: 2px solid #2a2a2a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: border-color 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
-    background: #080808;
-  }
-
-  .step-dot .dot-icon {
-    font-size: clamp(16px, 1.6vw, 22px);
-    transition: opacity 0.8s ease;
-    opacity: 0.4;
-  }
-
-  .diagram-step.active .step-dot {
-    border-color: #C9A84C;
-    box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
-    background: #0e0c08;
-  }
-
-  .diagram-step.active .step-dot .dot-icon { opacity: 1; }
-
-  .diagram-step.visited .step-dot {
-    border-color: #7A5A10;
-  }
-
-  .diagram-step.visited .step-dot .dot-icon { opacity: 0.5; }
-
-  .step-label {
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: clamp(18px, 2vw, 28px);
-    color: #606060;
-    transition: color 0.8s ease;
-    white-space: nowrap;
-  }
-
-  .diagram-step.active .step-label { color: #C9A84C; }
-  .diagram-step.visited .step-label { color: #7A5A10; }
-
-  /* Arrows between steps */
-  .diagram-arrow {
-    color: #2a2a2a;
-    font-size: clamp(18px, 1.8vw, 26px);
-    line-height: 1;
-    padding: 6px 0;
-    margin-left: clamp(8px, 0.8vw, 14px);
-    transition: color 0.8s ease;
-    user-select: none;
-  }
-
-  .diagram-arrow.active { color: #C9A84C; }
-  .diagram-arrow.visited { color: #7A5A10; }
-
-  /* Return arrow */
-  .diagram-return {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #2a2a2a;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(11px, 1.1vw, 14px);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-top: 6px;
-    margin-left: clamp(8px, 0.8vw, 14px);
-    transition: color 0.8s ease, opacity 0.8s ease;
-    opacity: 0;
-  }
-
-  .diagram-return.visible { opacity: 0.5; }
-  .diagram-return.active { color: #C9A84C; opacity: 0.8; }
-
-  /* Loop counter under diagram */
-  .loop-label {
-    margin-top: 3vh;
-    font-family: Calibri, Arial, sans-serif;
-    font-size: clamp(12px, 1.2vw, 16px);
-    color: #606060;
-    letter-spacing: 0.1em;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-    display: flex;
-    gap: 12px;
-  }
-
-  .loop-label.visible { opacity: 1; }
-
-  .loop-label .loop-num {
-    transition: color 0.5s ease;
-  }
-
-  .loop-label .loop-num.active {
-    color: #C9A84C;
-  }
-
-  .loop-label .loop-num.past {
-    color: #7A5A10;
-  }
 
   /* ---- Terminal wrapper + tools bar ---- */
   .terminal-wrapper {
@@ -378,29 +268,63 @@
 <div class="title" id="title">The Agentic Loop</div>
 
 <div class="main-layout" id="mainLayout">
-  <!-- Left: diagram -->
+  <!-- Left: SVG diagram -->
   <div class="diagram">
-    <div class="diagram-step" id="stepThink">
-      <div class="step-dot"><span class="dot-icon">💭</span></div>
-      <span class="step-label">Think</span>
-    </div>
-    <div class="diagram-arrow" id="arrowTA">↓</div>
-    <div class="diagram-step" id="stepAct">
-      <div class="step-dot"><span class="dot-icon">⚡</span></div>
-      <span class="step-label">Act</span>
-    </div>
-    <div class="diagram-arrow" id="arrowAO">↓</div>
-    <div class="diagram-step" id="stepObserve">
-      <div class="step-dot"><span class="dot-icon">👁</span></div>
-      <span class="step-label">Observe</span>
-    </div>
-    <div class="diagram-return" id="returnArrow">↻ repeat</div>
+    <div class="svg-diagram-container">
+      <svg id="loopSvg" viewBox="0 0 260 340" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <filter id="dotGlow">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
 
-    <div class="loop-label" id="loopLabel">
-      <span class="loop-num" id="ln1">1</span>
-      <span class="loop-num" id="ln2">2</span>
-      <span class="loop-num" id="ln3">3</span>
+        <!-- Completed iteration paths (faded) — drawn dynamically -->
+        <g id="completedPaths"></g>
+
+        <!-- Down path: Think -> Act (straight segment) -->
+        <path id="pathTA" d="M 70 55 L 70 115" fill="none" stroke="#2a2a2a" stroke-width="2" stroke-linecap="round"/>
+        <!-- Down path: Act -> Observe (straight segment) -->
+        <path id="pathAO" d="M 70 155 L 70 215" fill="none" stroke="#2a2a2a" stroke-width="2" stroke-linecap="round"/>
+        <!-- Return path: Observe -> Think (curves back up on the left) -->
+        <path id="pathReturn" d="M 70 255 Q 70 285, 40 285 Q 10 285, 10 255 L 10 75 Q 10 45, 40 45 Q 55 45, 70 45" fill="none" stroke="#2a2a2a" stroke-width="2" stroke-linecap="round"/>
+
+        <!-- Active drawing paths (gold, animated) -->
+        <path id="drawTA" d="M 70 55 L 70 115" fill="none" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)" stroke-dasharray="60" stroke-dashoffset="60"/>
+        <path id="drawAO" d="M 70 155 L 70 215" fill="none" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)" stroke-dasharray="60" stroke-dashoffset="60"/>
+        <path id="drawReturn" d="M 70 255 Q 70 285, 40 285 Q 10 285, 10 255 L 10 75 Q 10 45, 40 45 Q 55 45, 70 45" fill="none" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round" filter="url(#glow)" stroke-dasharray="500" stroke-dashoffset="500"/>
+
+        <!-- Step nodes -->
+        <!-- Think node -->
+        <circle id="nodeThink" cx="70" cy="40" r="18" fill="#080808" stroke="#2a2a2a" stroke-width="2"/>
+        <text x="70" y="46" text-anchor="middle" font-size="18" fill="#606060" style="pointer-events:none;">&#x1F4AD;</text>
+        <text id="labelThink" x="100" y="46" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#606060">Think</text>
+
+        <!-- Act node -->
+        <circle id="nodeAct" cx="70" cy="140" r="18" fill="#080808" stroke="#2a2a2a" stroke-width="2"/>
+        <text x="70" y="146" text-anchor="middle" font-size="18" fill="#606060" style="pointer-events:none;">&#x26A1;</text>
+        <text id="labelAct" x="100" y="146" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#606060">Act</text>
+
+        <!-- Observe node -->
+        <circle id="nodeObserve" cx="70" cy="240" r="18" fill="#080808" stroke="#2a2a2a" stroke-width="2"/>
+        <text x="70" y="246" text-anchor="middle" font-size="18" fill="#606060" style="pointer-events:none;">&#x1F441;</text>
+        <text id="labelObserve" x="100" y="246" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#606060">Observe</text>
+
+        <!-- Traveling dot -->
+        <circle id="travelDot" cx="70" cy="40" r="5" fill="#C9A84C" filter="url(#dotGlow)" opacity="0"/>
+      </svg>
     </div>
+
   </div>
 
   <!-- Right: terminal -->
@@ -466,86 +390,204 @@
   const termBody = document.getElementById('termBody');
   const takeaway = document.getElementById('takeaway');
 
-  const stepThink = document.getElementById('stepThink');
-  const stepAct = document.getElementById('stepAct');
-  const stepObserve = document.getElementById('stepObserve');
-  const arrowTA = document.getElementById('arrowTA');
-  const arrowAO = document.getElementById('arrowAO');
-  const returnArrow = document.getElementById('returnArrow');
-  const loopLabel = document.getElementById('loopLabel');
-  const ln1 = document.getElementById('ln1');
-  const ln2 = document.getElementById('ln2');
-  const ln3 = document.getElementById('ln3');
-  const loopNums = [ln1, ln2, ln3];
+
+  // SVG elements
+  const nodeThink = document.getElementById('nodeThink');
+  const nodeAct = document.getElementById('nodeAct');
+  const nodeObserve = document.getElementById('nodeObserve');
+  const labelThink = document.getElementById('labelThink');
+  const labelAct = document.getElementById('labelAct');
+  const labelObserve = document.getElementById('labelObserve');
+
+  const pathTA = document.getElementById('pathTA');
+  const pathAO = document.getElementById('pathAO');
+  const pathReturn = document.getElementById('pathReturn');
+  const drawTA = document.getElementById('drawTA');
+  const drawAO = document.getElementById('drawAO');
+  const drawReturn = document.getElementById('drawReturn');
+  const travelDot = document.getElementById('travelDot');
+  const completedPaths = document.getElementById('completedPaths');
+
+  const nodes = [nodeThink, nodeAct, nodeObserve];
+  const labels = [labelThink, labelAct, labelObserve];
+  const drawPaths = [drawTA, drawAO, drawReturn];
+  const basePaths = [pathTA, pathAO, pathReturn];
 
   const lineElements = [];
 
-  // Check if arriving from next slide (back navigation)
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('state') === 'last') {
-    // Show all steps up to and including takeaway
-    title.classList.add('visible', 'dimmed');
-    mainLayout.classList.add('visible', 'hidden');
-    loopLabel.classList.add('visible');
-    returnArrow.classList.add('visible');
+  // Track completed loops for faded path accumulation
+  let completedLoops = 0;
 
-    // Build all terminal lines (except takeaway)
-    for (let i = 0; i < steps.length; i++) {
-      const step = steps[i];
-      if (step.type === 'takeaway') continue;
-      const el = createLineElement(step);
-      if (step.type !== 'separator') {
-        const info = buildPrefix(step);
-        el.innerHTML = info.prefix + escapeHtml(info.raw) + info.suffix;
+  // Animation durations
+  const PATH_DRAW_DURATION = 400; // ms
+  const DOT_TRAVEL_DURATION = 350; // ms
+  const RETURN_DRAW_DURATION = 700; // ms
+
+  function resetSvgDiagram() {
+    // Reset all nodes to inactive
+    nodes.forEach(n => {
+      n.setAttribute('stroke', '#2a2a2a');
+      n.setAttribute('fill', '#080808');
+    });
+    labels.forEach(l => l.setAttribute('fill', '#606060'));
+
+    // Reset base paths
+    basePaths.forEach(p => p.setAttribute('stroke', '#2a2a2a'));
+
+    // Reset draw paths (hide them)
+    drawTA.style.strokeDashoffset = '60';
+    drawAO.style.strokeDashoffset = '60';
+    drawReturn.style.strokeDashoffset = '500';
+    drawTA.style.transition = 'none';
+    drawAO.style.transition = 'none';
+    drawReturn.style.transition = 'none';
+
+    // Hide traveling dot
+    travelDot.setAttribute('opacity', '0');
+  }
+
+  function setNodeActive(node, label) {
+    node.setAttribute('stroke', '#C9A84C');
+    node.setAttribute('fill', '#0e0c08');
+    label.setAttribute('fill', '#C9A84C');
+  }
+
+  function setNodeVisited(node, label) {
+    node.setAttribute('stroke', '#7A5A10');
+    node.setAttribute('fill', '#080808');
+    label.setAttribute('fill', '#7A5A10');
+  }
+
+  function setNodeInactive(node, label) {
+    node.setAttribute('stroke', '#2a2a2a');
+    node.setAttribute('fill', '#080808');
+    label.setAttribute('fill', '#606060');
+  }
+
+  function animateDrawPath(drawPath, duration) {
+    // Force reflow to reset transition
+    drawPath.style.transition = 'none';
+    drawPath.getBoundingClientRect();
+    drawPath.style.transition = `stroke-dashoffset ${duration}ms ease-in-out`;
+    drawPath.style.strokeDashoffset = '0';
+  }
+
+  function showDrawPathInstant(drawPath) {
+    drawPath.style.transition = 'none';
+    drawPath.style.strokeDashoffset = '0';
+  }
+
+  function hideDrawPath(drawPath) {
+    const len = drawPath.getAttribute('stroke-dasharray');
+    drawPath.style.transition = 'none';
+    drawPath.style.strokeDashoffset = len;
+  }
+
+  function moveDot(cx, cy, show) {
+    travelDot.setAttribute('cx', cx);
+    travelDot.setAttribute('cy', cy);
+    travelDot.setAttribute('opacity', show ? '1' : '0');
+  }
+
+  function animateDotAlongPath(pathEl, duration, reverse) {
+    return new Promise(resolve => {
+      const totalLen = pathEl.getTotalLength();
+      const start = performance.now();
+      travelDot.setAttribute('opacity', '1');
+
+      function tick(now) {
+        const elapsed = now - start;
+        let t = Math.min(elapsed / duration, 1);
+        // Ease in-out
+        t = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        const dist = reverse ? totalLen * (1 - t) : totalLen * t;
+        const pt = pathEl.getPointAtLength(dist);
+        travelDot.setAttribute('cx', pt.x);
+        travelDot.setAttribute('cy', pt.y);
+
+        if (elapsed < duration) {
+          requestAnimationFrame(tick);
+        } else {
+          resolve();
+        }
       }
-      lineElements.push(el);
-      termBody.appendChild(el);
-    }
-    dimPreviousLines();
+      requestAnimationFrame(tick);
+    });
+  }
 
-    currentStep = steps.length - 1; // takeaway step
-    takeaway.classList.add('visible');
-  } else {
-    // Init
-    setTimeout(() => { title.classList.add('visible'); }, 200);
+  function addCompletedLoopPath() {
+    // Clone the three path segments as faded completed paths
+    const paths = [
+      'M 70 55 L 70 115',
+      'M 70 155 L 70 215',
+      'M 70 255 Q 70 285, 40 285 Q 10 285, 10 255 L 10 75 Q 10 45, 40 45 Q 55 45, 70 45'
+    ];
+    paths.forEach(d => {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('fill', 'none');
+      p.setAttribute('stroke', '#7A5A10');
+      p.setAttribute('stroke-width', '1.5');
+      p.setAttribute('stroke-linecap', 'round');
+      p.setAttribute('opacity', '0.35');
+      completedPaths.appendChild(p);
+    });
   }
 
   function updateDiagram(phase, loop) {
-    // Reset
-    [stepThink, stepAct, stepObserve].forEach(s => {
-      s.classList.remove('active', 'visited');
-    });
-    [arrowTA, arrowAO].forEach(a => {
-      a.classList.remove('active', 'visited');
-    });
-    returnArrow.classList.remove('active');
+    // Reset drawing paths and nodes
+    resetSvgDiagram();
 
     if (!phase) return;
 
     if (phase === 'think') {
-      stepThink.classList.add('active');
-      // If returning from observe, show return arrow active briefly
+      setNodeActive(nodeThink, labelThink);
+      moveDot(70, 40, true);
+
+      // If loop > 1, we are returning from previous loop
       if (loop > 1) {
-        returnArrow.classList.add('active');
+        // Show the return path drawing with animation, then fade it
+        animateDrawPath(drawReturn, RETURN_DRAW_DURATION);
+        animateDotAlongPath(pathReturn, RETURN_DRAW_DURATION, false).then(() => {
+          moveDot(70, 40, true);
+        });
       }
+
     } else if (phase === 'act') {
-      stepThink.classList.add('visited');
-      arrowTA.classList.add('active');
-      stepAct.classList.add('active');
+      setNodeVisited(nodeThink, labelThink);
+      setNodeActive(nodeAct, labelAct);
+
+      // Draw path from Think to Act
+      animateDrawPath(drawTA, PATH_DRAW_DURATION);
+      animateDotAlongPath(pathTA, DOT_TRAVEL_DURATION, false).then(() => {
+        moveDot(70, 140, true);
+      });
+
     } else if (phase === 'observe') {
-      stepThink.classList.add('visited');
-      arrowTA.classList.add('visited');
-      stepAct.classList.add('visited');
-      arrowAO.classList.add('active');
-      stepObserve.classList.add('active');
+      setNodeVisited(nodeThink, labelThink);
+      setNodeVisited(nodeAct, labelAct);
+      setNodeActive(nodeObserve, labelObserve);
+
+      // Show Think->Act path as completed
+      showDrawPathInstant(drawTA);
+      drawTA.setAttribute('stroke', '#7A5A10');
+
+      // Draw path from Act to Observe
+      animateDrawPath(drawAO, PATH_DRAW_DURATION);
+      animateDotAlongPath(pathAO, DOT_TRAVEL_DURATION, false).then(() => {
+        moveDot(70, 240, true);
+      });
+
+      // Mark this loop iteration completed after observe
+      if (loop > completedLoops) {
+        // Delay slightly so animation plays first
+        setTimeout(() => {
+          addCompletedLoopPath();
+          completedLoops = loop;
+        }, PATH_DRAW_DURATION + 100);
+      }
     }
 
-    // Update loop numbers
-    loopNums.forEach((el, i) => {
-      el.classList.remove('active', 'past');
-      if (i + 1 === loop) el.classList.add('active');
-      else if (i + 1 < loop) el.classList.add('past');
-    });
   }
 
   function buildPrefix(step) {
@@ -638,6 +680,37 @@
     termBody.scrollTop = termBody.scrollHeight;
   }
 
+  // Check if arriving from next slide (back navigation)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('state') === 'last') {
+    // Show all steps up to and including takeaway
+    title.classList.add('visible', 'dimmed');
+    mainLayout.classList.add('visible', 'hidden');
+    // Build all terminal lines (except takeaway)
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      if (step.type === 'takeaway') continue;
+      const el = createLineElement(step);
+      if (step.type !== 'separator') {
+        const info = buildPrefix(step);
+        el.innerHTML = info.prefix + escapeHtml(info.raw) + info.suffix;
+      }
+      lineElements.push(el);
+      termBody.appendChild(el);
+    }
+    dimPreviousLines();
+
+    // Show all completed loop paths
+    for (let i = 0; i < 3; i++) addCompletedLoopPath();
+    completedLoops = 3;
+
+    currentStep = steps.length - 1; // takeaway step
+    takeaway.classList.add('visible');
+  } else {
+    // Init
+    setTimeout(() => { title.classList.add('visible'); }, 200);
+  }
+
   async function forward() {
     if (typing) {
       const step = steps[currentStep];
@@ -668,12 +741,6 @@
     mainLayout.classList.remove('hidden');
     title.classList.remove('dimmed');
     takeaway.classList.remove('visible');
-
-    // Show loop label and return arrow once we're in loops
-    if (step.loop >= 1) {
-      loopLabel.classList.add('visible');
-      returnArrow.classList.add('visible');
-    }
 
     // Update diagram
     if (step.phase) {
@@ -737,6 +804,22 @@
 
     currentStep--;
 
+    // Recalculate completed loops based on current position
+    let maxCompletedLoop = 0;
+    for (let i = 0; i <= currentStep; i++) {
+      if (steps[i].phase === 'observe') {
+        maxCompletedLoop = steps[i].loop;
+      }
+    }
+    // Remove excess completed paths if needed
+    while (completedLoops > maxCompletedLoop) {
+      // Remove last 3 children (the 3 path segments per loop)
+      for (let j = 0; j < 3 && completedPaths.lastChild; j++) {
+        completedPaths.removeChild(completedPaths.lastChild);
+      }
+      completedLoops--;
+    }
+
     if (currentStep >= 0) {
       const s = steps[currentStep];
       if (s.phase) {
@@ -748,8 +831,6 @@
       }
     } else {
       updateDiagram(null, 0);
-      loopLabel.classList.remove('visible');
-      returnArrow.classList.remove('visible');
     }
 
     dimPreviousLines();
